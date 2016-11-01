@@ -1,5 +1,5 @@
-# tallently
-Use your talent to enhance your career!
+# BukuGajah
+Another rip-off app for learning purposes! :sunglasses:
 
 ## Installation
 
