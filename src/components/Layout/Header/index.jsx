@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 
+import SearchInputUI from '../../SemanticUI/Input/SearchInputUI'
 import css from './header.css'
 
 const Header = () => (
@@ -8,26 +9,8 @@ const Header = () => (
     <Link to="/" className={css.logo}>BukuGajah</Link>
     <div className={css.search}>
       <form>
-        <input
-          type="text"
-          placeholder="search.."
-        />
-        <input type="submit" defaultValue="Search" />
+        <SearchInputUI type="text" />
       </form>
-    </div>
-    <div className={css.nav}>
-      <ul>
-        <Link to="/">
-          <li>
-            User
-          </li>
-        </Link>
-        <Link to="/">
-          <li>
-            Login
-          </li>
-        </Link>
-      </ul>
     </div>
   </div>
 )

@@ -3,7 +3,7 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
 import Layout from '../components/Layout/index';
 import Notes from './Notes';
-import Users from './Users';
+// import Users from './Users';
 
 export default <Router history={hashHistory}>
   <Route
@@ -13,9 +13,11 @@ export default <Router history={hashHistory}>
     <IndexRoute
       component={Notes}
     />
+    /*
     <Route
       path="/users"
-      component={Users}
+      component={Notes}
     />
+    */
   </Route>
 </Router>;

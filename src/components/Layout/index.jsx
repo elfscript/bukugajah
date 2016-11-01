@@ -4,7 +4,7 @@ import Header from './Header'
 
 const Layout = (props) => {
   const childrenStyle = {
-    paddingTop: 50,
+    paddingTop: 100,
   }
   return (
     <div>

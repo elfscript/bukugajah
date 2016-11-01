@@ -13,7 +13,6 @@ module.exports = {
     path: path.join(__dirname, 'public/js'),
     publicPath: 'http://localhost:3000/public/js/',
   },
-  devtool: 'source-map',
   resolve: {
     extensions: ['', '.js', '.jsx'],
   },
@@ -31,6 +30,13 @@ module.exports = {
         test: /\.css$/,
         loader: 'style-loader!css-loader?modules=true&localIdentName=[name]__[local]___[hash:base64:5]',
       },
+      /*
+      {
+        test: /\.scss$/,
+        loader: 'style-loader!
+        sass-loader?modules=true&localIdentName=[name]__[local]___[hash:base64:5]',
+      },
+      */
     ],
   },
 };
