@@ -1,0 +1,74 @@
+.header {
+  font-family:Open Sans, sans-serif;
+  padding: 5px 20px;
+  background: #03A678;
+  position: fixed;
+  z-index: +999;
+  width: 100%;
+  text-align: center;
+}
+
+.header > .logo {
+  text-align: center;
+  font-family:Open Sans, sans-serif;
+  font-size: 2em;
+  color: #FFFFFF;
+  width: 200;
+  margin: 10px auto;
+  text-decoration: none;
+  float: left;
+}
+
+.search {
+  width: 60%;
+  overflow: hidden;
+  float:left;
+}
+
+.search input[type=text] {
+  margin-top:12px;
+  padding:10px 30px;
+  border:0;
+  border-radius:5;
+  outline:0;
+  width:50%;
+  font-size:1em;
+}
+
+.search input[type=submit] {
+  padding:13px 20px;
+  background: #59ABE3;
+  color: #FFFFFF;
+  border: none;
+  font-size: 1em;
+  text-transform: uppercase;
+  margin: -3px 10px;
+  border-radius:5px;
+  outline:0;
+  cursor:pointer;
+}
+
+.nav {
+  color:#FFFFFF;
+  float:right;
+  margin-right: 30px;
+}
+
+.nav ul {
+    list-style: none;
+}
+
+.nav ul li{
+  float:left;
+  padding:10px 20px;
+  border-left: 1px solid rgba(255,255,255, .2);
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.notifLabel {
+  padding:1px 5px;
+  color: #FFFFFF;
+  background: #EB9532;
+  border-radius: 5;
+}
