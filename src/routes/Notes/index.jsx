@@ -1,59 +1,41 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import css from './index.css';
-import { ButtonUI, InputUI, CardSimpleUI, IconUI } from '../../components/SemanticUI';
+
+import Sidebar from './sidebar';
+import Editor from './editor';
+import ContentDefault from './contentDefault';
 
 class Notes extends Component {
-  handleClick() {
-    console.log(this)
+  constructor(props) {
+    super(props);
+    this.state = {
+      newNoteBool: false,
+    }
+
+    this.setNewNote = this.setNewNote.bind(this);
   }
+
+  setNewNote(newNoteBool) {
+    this.setState({ newNoteBool: true });
+  }
+
   render() {
-    return (
-      <div>
-        <div className={css.sidebar}>
-          <h2>Notes</h2>
-          <ButtonUI className={css.addButton}>
-            <IconUI name="add circle" />
-            Add New
-          </ButtonUI>
-          <div className={css.sidebarList}>
-            <div>
-              <Link className={css.noteLink}>Basic Idea</Link>
-              <p className={css.textFaded}>7 Nov 2016</p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Sine ea igitur iucunde negat posse se vivere? Nescio quo
-                modo praetervolavit oratio. Non dolere, inquam, istud quam
-                vim habeat postea videro; Ita enim vivunt.
-              </p>
-            </div>
-            <div>
-              <Link className={css.noteLink}>Basic Idea</Link>
-              <p className={css.textFaded}>7 Nov 2016</p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Sine ea igitur iucunde negat posse se vivere? Nescio quo
-                modo praetervolavit oratio. Non dolere, inquam, istud quam
-                vim habeat postea videro; Ita enim vivunt.
-              </p>
-            </div>
-            <div>
-              <Link className={css.noteLink}>Basic Idea</Link>
-              <p className={css.textFaded}>7 Nov 2016</p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Sine ea igitur iucunde negat posse se vivere? Nescio quo
-                modo praetervolavit oratio. Non dolere, inquam, istud quam
-                vim habeat postea videro; Ita enim vivunt.
-              </p>
-            </div>
+    if (this.state.newNoteBool === true) {
+      return (
+        <div>
+          <Sidebar />
+          <div className={css.content}>
+            <Editor />
           </div>
         </div>
+      );
+    }
+
+    return (
+      <div>
+        <Sidebar />
         <div className={css.content}>
-          <input className={css.titleStoryBox} value="Default Value 101" />
-          <p>500 Words, 12500 characters</p>
-          <InputUI type="text" placeholder="tags..." />
-          <div className={css.bigStoryBox} contentEditable="true"></div>
+          <ContentDefault handleSetNewNote={this.setNewNote} />
         </div>
       </div>
     );

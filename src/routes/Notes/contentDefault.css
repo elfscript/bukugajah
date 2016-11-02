@@ -1,0 +1,19 @@
+.contentDefaultWrapper {
+  text-align: center;
+  padding-top:7%;
+  background: #FDFDFD;
+  height: 550px;
+  border-radius: 20px;
+}
+
+h2 {
+  color: #AAA;
+  margin-top: 30px;
+}
+
+.newBtn {
+  font-size: 2em !important;
+  background: #3FC380 !important;
+  color: #FFF !important;
+  margin-top:20px !important;
+}

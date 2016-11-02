@@ -1,0 +1,70 @@
+.textFaded {
+  color:#aaa !important;
+}
+
+.sidebar {
+  font-family: 'Slabo 27px', serif;
+  width: 400px;
+  border-right: 1px solid #DDD;
+  padding-left: 20px;
+  padding-top: 20px;
+  margin-top: -20px;
+  display: inline-block;
+  height: 100%;
+  position: fixed;
+}
+
+.sidebarList {
+  font-family: 'Abel', sans-serif;
+  height: 500px;
+  overflow-y: scroll;
+  border-top: 1px solid #DDD;
+  border-bottom: 1px solid #DDD;
+}
+
+.sidebarList p {
+  font-family: 'Abel', sans-serif;
+  line-height: 1.2;
+  font-size: 1.1em;
+  font-weight: lighter;
+  color: #333;
+}
+
+.noteLink, .noteLink:hover {
+  color: #3FC380;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+.sidebarList > div {
+  border-bottom: 1px solid #DDD;
+  padding: 20px;
+  padding-left: 10px;
+  transition: 0.2s;
+}
+
+.sidebarList > div:hover {
+  border-left: 6px solid #3FC380;
+  transition: 0.2s;
+}
+
+.sidebar h2 {
+  font-family: 'Slabo 27px', serif;
+  color: #666;
+  padding-left: 10px;
+}
+
+.addButton {
+  position: absolute !important;
+  right: 5px;
+  top: 15px;
+  background: #3FC380 !important;
+  color: #FFF !important;
+  border: 1px solid #FFF !important;
+}
+
+.addButton:hover {
+  background: #FFF !important;
+  color: #3FC380 !important;
+  border: 1px solid #3FC380 !important;
+}

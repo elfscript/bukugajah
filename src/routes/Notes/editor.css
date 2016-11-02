@@ -1,0 +1,96 @@
+.bigStoryBox {
+  width: 100%;
+  height: 450px;
+  max-height: 500px;
+  border: 0;
+  outline: 0;
+  padding-top: 20px;
+  border-top: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 1.2em;
+  color: #666;
+  line-height: 35px;
+  overflow-y: auto;
+  padding-bottom: 100px;
+}
+
+[contentEditable=true]:empty:not(:focus):before{
+    content:attr(data-placeholder);
+    cursor: text;
+    color: #AAA;
+}
+
+.titleStoryBox {
+  padding: 10px 0px;
+  border: 0;
+  outline: 0;
+  font-family: 'Slabo 27px', serif;
+  font-size: 2em;
+  color: #3FC380;
+}
+
+.editorBar {
+  position: absolute !important;
+  right: 30px;
+  top: 0px;
+}
+
+.editorBar > div {
+  width: 100px;
+  height: 90px;
+  cursor: pointer;
+  padding: 0px;
+  padding-bottom: -10px;
+  border: 2px solid #FFF;
+  transition: .1s;
+  float: left;
+  opacity: 0.8;
+  color: #AAA;
+}
+
+.editorBar > div:hover {
+  border: 2px solid #3FC380;
+  transition: .5s;
+  border-radius: 10px;
+  opacity: 1;
+  color: #3FC380;
+}
+
+.editorBar .editorDanger:hover {
+  color: #D91E18;
+  border-color: #D91E18;
+}
+
+.editorBar > div > h6 {
+  width: 100%;
+  font-size: 1em;
+  text-align: center;
+  padding: 0;
+  margin-top: 0px;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+.editorBar .icon {
+  font-size: 3em;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.tagInput {
+  position: absolute !important;
+  right: 30px;
+  top: 30px;
+}
+
+.wordCount {
+  color: #aaa;
+}
+
+.noteChangesFlag {
+  background: #3FC380;
+  color: #FFF;
+  padding: 3px 20px;
+  margin-left: 10px;
+  border-radius: 12px;
+}
