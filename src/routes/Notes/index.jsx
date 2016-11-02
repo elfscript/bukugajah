@@ -52,6 +52,7 @@ class Notes extends Component {
         <div className={css.content}>
           <input className={css.titleStoryBox} value="Default Value 101" />
           <p>500 Words, 12500 characters</p>
+          <InputUI type="text" placeholder="tags..." />
           <div className={css.bigStoryBox} contentEditable="true"></div>
         </div>
       </div>

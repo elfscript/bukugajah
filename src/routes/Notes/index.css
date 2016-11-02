@@ -2,6 +2,10 @@
   color:#aaa !important;
 }
 
+input[type="text"] {
+  outline: #3FC380 !important;
+}
+
 .sidebar {
   font-family: 'Slabo 27px', serif;
   width: 400px;
