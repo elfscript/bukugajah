@@ -1,8 +1,7 @@
-import { combineReducers } from 'redux'
-import * as ActionTypes from '../constants'
+import { combineReducers } from 'redux';
 
-import NoteReducer from './NoteReducer'
+import NoteSearchReducer from './NoteSearchReducer';
 
-const rootReducer = combineReducers({ notes: NoteReducer })
+const rootReducer = combineReducers({ noteSearchTerm: NoteSearchReducer });
 
-export default rootReducer
+export default rootReducer;

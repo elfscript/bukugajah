@@ -20,6 +20,7 @@
   overflow-y: auto;
   border-top: 1px solid #DDD;
   border-bottom: 1px solid #DDD;
+  padding-top:20px;
 }
 
 .sidebarList p {
@@ -68,4 +69,17 @@
   background: #FFF !important;
   color: #3FC380 !important;
   border: 1px solid #3FC380 !important;
+}
+
+.searchFilterContainer {
+  position: absolute;
+  top: 65px;
+  background: #F5F5F5;
+  width: 92%;
+  padding: 5px;
+}
+
+.searchFilter {
+  font-family: 'Slabo 27px', serif;
+  color: #3FC380;;
 }

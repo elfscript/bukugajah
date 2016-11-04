@@ -1,4 +1,4 @@
-import { createStore, compose } from 'redux'
+import { createStore } from 'redux'
 import { connect } from 'react-redux'
 
 import rootReducer from '../reducers'
@@ -20,15 +20,15 @@ export const store = createStore(rootReducer);
 ))*/
 
 const mapStateToProps = state => ({
-  notesData: state.notesData
+  noteSearchTerm: state.noteSearchTerm,
 });
 
 const mapDispatchToProps = dispatch => ({
-  setSearchTerm: (notesData) => {
+  setNoteSearchTerm: (noteSearchTerm) => {
     dispatch({
-      type: ActionTypes.SET_SEARCH_TERM,
-      text: 'set search term for characters',
-      value: notesData
+      type: ActionTypes.SET_NOTE_SEARCH_TERM,
+      text: 'set search term for notes',
+      value: noteSearchTerm
     })
   },
 });

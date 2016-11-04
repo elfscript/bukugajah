@@ -3,6 +3,8 @@ import { Link } from 'react-router';
 import css from './sidebar.css';
 import { ButtonUI, IconUI } from '../../components/SemanticUI';
 
+import { connector } from '../../store';
+
 const dataNotes = [
   {
     id: 1,
@@ -68,19 +70,36 @@ SidebarNoteItem.propTypes = {
   description: React.PropTypes.string,
 }
 
-const Sidebar = () => (
-  <div className={css.sidebar}>
-    <h2>Notes</h2>
-    <Link to="/editor">
-      <ButtonUI className={css.addButton}>
-        <IconUI name="add circle" />
-        Add a New Note
-      </ButtonUI>
-    </Link>
-    <div className={css.sidebarList}>
-      {dataNotes.map(dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />)}
-    </div>
-  </div>
-);
+const Sidebar = (props) => {
+  let searchTerm = '';
+  if (typeof props.noteSearchTerm === 'string') {
+    searchTerm = props.noteSearchTerm;
+  }
 
-export default Sidebar;
+  return (
+    <div className={css.sidebar}>
+      <h2>Notes</h2>
+      <Link to="/editor">
+        <ButtonUI className={css.addButton}>
+          <IconUI name="add circle" />
+          Add a New Note
+        </ButtonUI>
+      </Link>
+      <p className={css.searchFilterContainer}>
+        <span>Filter: </span>
+        <span className={css.searchFilter}>{searchTerm}</span>
+      </p>
+      <div className={css.sidebarList}>
+        {
+          dataNotes.filter(
+            dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
+          ).map(
+            dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />
+          )
+        }
+      </div>
+    </div>
+  );
+}
+
+export default connector(Sidebar);
