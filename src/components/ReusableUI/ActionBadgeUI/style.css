@@ -1,0 +1,19 @@
+.actionBadge {
+  cursor: pointer;
+  color: #FFF;
+  position: absolute;
+  top: 0px;
+  left: 35%;
+  padding: 10px 20px;
+  z-index: 995;
+  border-radius: 20px;
+  opacity: 0.8;
+}
+
+.greenBadge {
+  background: #3FC380;
+}
+
+.redBadge {
+  background: #D91E18;
+}

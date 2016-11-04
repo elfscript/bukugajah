@@ -52,8 +52,6 @@ const dataNotes = [
   },
 ];
 
-console.log(dataNotes);
-
 const SidebarNoteItem = props => (
   <div>
     <Link className={css.noteLink}>{props.title}</Link>

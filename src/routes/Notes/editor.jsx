@@ -2,25 +2,8 @@ import React, { Component } from 'react';
 import { Link, router } from 'react-router';
 import ContentEditable from 'react-contenteditable';
 import css from './editor.css';
-import { IconUI } from '../../components/SemanticUI';
-
-const ActionBadge = (props) => {
-  let badgeColor = css.greenBadge;
-  if (props.type === 'saved') {
-    badgeColor = css.greenBadge;
-  }
-  if (props.type === 'deleted') {
-    badgeColor = css.redBadge;
-  }
-  return (
-    <div className={`${css.actionBadge} ${badgeColor}`}>{props.value}</div>
-  );
-};
-
-ActionBadge.propTypes = {
-  value: React.PropTypes.string,
-  type: React.PropTypes.string,
-}
+import { IconUI, CustomModalUI } from '../../components/SemanticUI';
+import { ActionBadgeUI } from '../../components/ReusableUI';
 
 class Editor extends Component {
   constructor(props) {
@@ -30,7 +13,7 @@ class Editor extends Component {
       newNoteContent: '',
       noteWords: 0,
       currentSavedNoteContent: '',
-      hasChanges: 1,
+      hasChanges: true,
       hasBeenSaved: false,
       hasBeenDeleted: false,
       newNoteValidation: {
@@ -53,10 +36,17 @@ class Editor extends Component {
     const noteValue = event.target.value;
     this.setState({ newNoteContent: noteValue });
     const countWords = event.target.value.split(' ').filter(word => word !== '');
+
     if (noteValue !== '') {
       this.setState({ noteWords: countWords.length });
     } else {
       this.setState({ noteWords: 0 });
+    }
+
+    if (noteValue !== this.state.currentSavedNoteContent) {
+      this.setState({ hasChanges: true });
+    } else {
+      this.setState({ hasChanges: false });
     }
   }
 
@@ -68,6 +58,7 @@ class Editor extends Component {
       this.setState({ newNoteValidation: { isContentEmpty: true } });
       setTimeout(() => this.setState({ newNoteValidation: { isContentEmpty: false } }), 1000);
     } else {
+      this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
       this.setState({ hasBeenSaved: true });
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     }
@@ -80,29 +71,21 @@ class Editor extends Component {
 
 
   render() {
-    let changesFlag = () => <div>asda</div>;
-
-    if (this.state.hasChanges === 1) {
-      changesFlag = () => (
-        <span className={css.noteChangesFlag}>you have unsaved changes!</span>
-      );
-    }
-
     return (
       <div>
         {
           this.state.hasBeenSaved ?
-            <ActionBadge value="your note has been saved!" type="saved" />
+            <ActionBadgeUI value="your note has been saved!" type="saved" />
             : null
         }
         {
           this.state.hasBeenDeleted ?
-            <ActionBadge value="your note has been deleted!" type="deleted" />
+            <ActionBadgeUI value="your note has been deleted!" type="deleted" />
             : null
         }
         {
           this.state.newNoteValidation.isTitleEmpty ?
-            <ActionBadge value="title must be filled!" type="deleted" />
+            <ActionBadgeUI value="title must be filled!" type="deleted" />
             : null
         }
         {
@@ -117,7 +100,11 @@ class Editor extends Component {
         />
         <p>
           <span className={css.wordCount}>{this.state.noteWords} Word(s) long </span>
-          {changesFlag}
+          {
+            this.state.hasChanges ?
+              <span className={css.noteChangesFlag}>you have unsaved changes!</span>
+              : null
+          }
         </p>
         <div className={css.editorBar}>
           <Link className={css.editorButton} onClick={this.handleNoteSave}>
@@ -125,16 +112,40 @@ class Editor extends Component {
             <h6>Save</h6>
           </Link>
           <div className={css.editorButton}>
-            <IconUI name="image" className={css.icon} />
-            <h6>Image</h6>
+            <CustomModalUI
+              modalHeader="Upload Image"
+              modalDescriptionHeader="Upload Image Here"
+              modalDescription="test 123"
+            >
+              <div>
+                <IconUI name="image" className={css.icon} />
+                <h6>Image</h6>
+              </div>
+            </CustomModalUI>
           </div>
           <div className={css.editorButton}>
-            <IconUI name="marker" className={css.icon} />
-            <h6>Location</h6>
+            <CustomModalUI
+              modalHeader="Add Location"
+              modalDescriptionHeader="add location"
+              modalDescription="test 123"
+            >
+              <div>
+                <IconUI name="marker" className={css.icon} />
+                <h6>Location</h6>
+              </div>
+            </CustomModalUI>
           </div>
           <div className={css.editorButton}>
-            <IconUI name="tag" className={css.icon} />
-            <h6>Tags</h6>
+            <CustomModalUI
+              modalHeader="Add Tags"
+              modalDescriptionHeader="add tag"
+              modalDescription="test 123"
+            >
+              <div>
+                <IconUI name="tag" className={css.icon} />
+                <h6>Tags</h6>
+              </div>
+            </CustomModalUI>
           </div>
           <Link className={css.editorDanger} onClick={this.handleNoteDelete}>
             <IconUI name="trash" className={css.icon} />

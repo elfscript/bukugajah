@@ -61,7 +61,7 @@
   border-color: #D91E18;
 }
 
-.editorBar > div > h6, .editorBar > a > h6 {
+.editorBar > div h6, .editorBar > a h6 {
   width: 100%;
   font-size: 1em;
   text-align: center;
@@ -88,29 +88,10 @@
 }
 
 .noteChangesFlag {
-  background: #3FC380;
+  background: #AAA;
   color: #FFF;
   padding: 3px 20px;
   margin-left: 10px;
   border-radius: 12px;
-}
-
-.actionBadge {
-  cursor: pointer;
-  color: #FFF;
-  position: absolute;
-  top: 0px;
-  left: 35%;
-  padding: 10px 20px;
-  z-index: 995;
-  border-radius: 20px;
-  opacity: 0.8;
-}
-
-.greenBadge {
-  background: #3FC380;
-}
-
-.redBadge {
-  background: #D91E18;
+  opacity: 0.6;
 }
