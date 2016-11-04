@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, router } from 'react-router';
+import { Link } from 'react-router';
 import ContentEditable from 'react-contenteditable';
 import css from './editor.css';
 import { IconUI, CustomModalUI } from '../../components/SemanticUI';
@@ -12,6 +12,7 @@ class Editor extends Component {
       newNoteTitle: 'Untitled Note',
       newNoteContent: '',
       noteWords: 0,
+      currentSavedNoteTitle: '',
       currentSavedNoteContent: '',
       hasChanges: true,
       hasBeenSaved: false,
@@ -29,24 +30,35 @@ class Editor extends Component {
   }
 
   handleTitleChange(event) {
-    this.setState({ newNoteTitle: event.target.value });
+    const noteTitleValue = event.target.value;
+    console.log('new:', noteTitleValue);
+    console.log('current:', this.state.currentSavedNoteTitle);
+    if (noteTitleValue !== this.state.currentSavedNoteTitle) {
+      this.setState({ hasChanges: true });
+    } else {
+      this.setState({ hasChanges: false });
+    }
+
+    this.setState({ newNoteTitle: noteTitleValue });
   }
 
   handleNoteChange(event) {
     const noteValue = event.target.value;
+    console.log('new:', noteValue);
+    console.log('current:', this.state.currentSavedNoteContent);
+    if (noteValue !== this.state.currentSavedNoteContent) {
+      this.setState({ hasChanges: true });
+    } else {
+      this.setState({ hasChanges: false });
+    }
+
     this.setState({ newNoteContent: noteValue });
-    const countWords = event.target.value.split(' ').filter(word => word !== '');
+    const countWords = event.target.value.split(' ').filter(word => word !== '&nbsp;' && word !== '&nbsp;&nbsp;');
 
     if (noteValue !== '') {
       this.setState({ noteWords: countWords.length });
     } else {
       this.setState({ noteWords: 0 });
-    }
-
-    if (noteValue !== this.state.currentSavedNoteContent) {
-      this.setState({ hasChanges: true });
-    } else {
-      this.setState({ hasChanges: false });
     }
   }
 
@@ -54,10 +66,11 @@ class Editor extends Component {
     if (this.state.newNoteTitle === '') {
       this.setState({ newNoteValidation: { isTitleEmpty: true } });
       setTimeout(() => this.setState({ newNoteValidation: { isTitleEmpty: false } }), 1000);
-    } else if (this.state.newNoteDescription === '') {
+    } else if (this.state.newNoteContent === '') {
       this.setState({ newNoteValidation: { isContentEmpty: true } });
       setTimeout(() => this.setState({ newNoteValidation: { isContentEmpty: false } }), 1000);
     } else {
+      this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
       this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
       this.setState({ hasBeenSaved: true });
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
@@ -66,7 +79,7 @@ class Editor extends Component {
 
   handleNoteDelete() {
     this.setState({ hasBeenDeleted: true });
-    setTimeout(() => { this.setState({ hasBeenDeleted: false }); router.push('/'); }, 1000);
+    setTimeout(() => { this.setState({ hasBeenDeleted: false }); this.props.history.push('/'); }, 1000);
   }
 
 
@@ -90,7 +103,7 @@ class Editor extends Component {
         }
         {
           this.state.newNoteValidation.isContentEmpty ?
-            <ActionBadge value="content must be filled!" type="deleted" />
+            <ActionBadgeUI value="content must be filled!" type="deleted" />
             : null
         }
         <input
