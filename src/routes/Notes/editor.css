@@ -48,7 +48,7 @@
   color: #AAA;
 }
 
-.editorBar > div:hover, .editorBar > a:hover {
+.editorBar > .editorButton:hover, .editorBar > a:hover {
   border: 2px solid #3FC380;
   transition: .5s;
   border-radius: 10px;
@@ -93,4 +93,24 @@
   padding: 3px 20px;
   margin-left: 10px;
   border-radius: 12px;
+}
+
+.actionBadge {
+  cursor: pointer;
+  color: #FFF;
+  position: absolute;
+  top: 0px;
+  left: 35%;
+  padding: 10px 20px;
+  z-index: 995;
+  border-radius: 20px;
+  opacity: 0.8;
+}
+
+.greenBadge {
+  background: #3FC380;
+}
+
+.redBadge {
+  background: #D91E18;
 }
