@@ -3,6 +3,73 @@ import { Link } from 'react-router';
 import css from './sidebar.css';
 import { ButtonUI, IconUI } from '../../components/SemanticUI';
 
+const dataNotes = [
+  {
+    id: 1,
+    title: 'My Future Nendos',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
+    createdAt: '20-20-2016',
+    updatedAt: '21-20-2016',
+    tags: ['casual', 'productivity', 'life'],
+    category: 'work',
+    images: ['menma', 'asuna'],
+  },
+  {
+    id: 2,
+    title: 'New Coding Agenda',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
+    createdAt: '20-20-2016',
+    updatedAt: '21-20-2016',
+    tags: ['casual', 'productivity', 'life'],
+    category: 'work',
+  },
+  {
+    id: 3,
+    title: 'Food List',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
+    createdAt: '20-20-2016',
+    updatedAt: '21-20-2016',
+    tags: ['casual', 'productivity', 'life'],
+    category: 'work',
+  },
+  {
+    id: 4,
+    title: 'My Own Novel Book',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
+    createdAt: '20-20-2016',
+    updatedAt: '21-20-2016',
+    tags: ['casual', 'productivity', 'life'],
+    category: 'work',
+  },
+  {
+    id: 5,
+    title: 'Bucket List',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
+    createdAt: '20-20-2016',
+    updatedAt: '21-20-2016',
+    tags: ['casual', 'productivity', 'life'],
+    category: 'work',
+  },
+];
+
+console.log(dataNotes);
+
+const SidebarNoteItem = props => (
+  <div>
+    <Link className={css.noteLink}>{props.title}</Link>
+    <p className={css.textFaded}>{props.createdAt}</p>
+    <p>
+      {props.description}
+    </p>
+  </div>
+);
+
+SidebarNoteItem.propTypes = {
+  title: React.PropTypes.string,
+  createdAt: React.PropTypes.string,
+  description: React.PropTypes.string,
+}
+
 const Sidebar = () => (
   <div className={css.sidebar}>
     <h2>Notes</h2>
@@ -13,16 +80,7 @@ const Sidebar = () => (
       </ButtonUI>
     </Link>
     <div className={css.sidebarList}>
-      <div>
-        <Link className={css.noteLink}>Basic Idea</Link>
-        <p className={css.textFaded}>7 Nov 2016</p>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Sine ea igitur iucunde negat posse se vivere? Nescio quo
-          modo praetervolavit oratio. Non dolere, inquam, istud quam
-          vim habeat postea videro; Ita enim vivunt.
-        </p>
-      </div>
+      {dataNotes.map(dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />)}
     </div>
   </div>
 );
