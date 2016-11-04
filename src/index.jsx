@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AppContainer from './containers/AppContainer';
-
-const store = {}; // Not yet used.. its fandy's job. LOL
+import { connector, store } from './store';
 
 ReactDOM.render(
   <AppContainer store={store} />,

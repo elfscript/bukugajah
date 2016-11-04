@@ -31,8 +31,6 @@ class Editor extends Component {
 
   handleTitleChange(event) {
     const noteTitleValue = event.target.value;
-    console.log('new:', noteTitleValue);
-    console.log('current:', this.state.currentSavedNoteTitle);
     if (noteTitleValue !== this.state.currentSavedNoteTitle) {
       this.setState({ hasChanges: true });
     } else {
@@ -44,8 +42,6 @@ class Editor extends Component {
 
   handleNoteChange(event) {
     const noteValue = event.target.value;
-    console.log('new:', noteValue);
-    console.log('current:', this.state.currentSavedNoteContent);
     if (noteValue !== this.state.currentSavedNoteContent) {
       this.setState({ hasChanges: true });
     } else {
