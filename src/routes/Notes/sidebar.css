@@ -23,11 +23,11 @@
 }
 
 .sidebarList p {
-  font-family: 'Abel', sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   line-height: 1.2;
-  font-size: 1.1em;
+  font-size: 1em;
   font-weight: lighter;
-  color: #333;
+  color: #999;
 }
 
 .noteLink, .noteLink:hover {
@@ -40,12 +40,13 @@
   border-bottom: 1px solid #DDD;
   padding: 20px;
   padding-left: 10px;
-  transition: 0.2s;
+  transition: 0.5s;
+  cursor: pointer;
 }
 
 .sidebarList > div:hover {
-  border-left: 6px solid #3FC380;
-  transition: 0.2s;
+  border-left: 10px solid #3FC380;
+  transition: 0.5s;
 }
 
 .sidebar h2 {

@@ -3,6 +3,9 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 
 import Layout from '../components/Layout/index';
 import Notes from './Notes';
+
+import Editor from './Notes/editor';
+import ContentDefault from './Notes/contentDefault';
 // import Users from './Users';
 
 export default <Router history={hashHistory}>
@@ -10,14 +13,16 @@ export default <Router history={hashHistory}>
     path="/"
     component={Layout}
   >
-    <IndexRoute
-      component={Notes}
-    />
-    /*
     <Route
-      path="/users"
       component={Notes}
-    />
-    */
+    >
+      <IndexRoute
+        component={ContentDefault}
+      />
+      <Route
+        path="/editor"
+        component={Editor}
+      />
+    </Route>
   </Route>
 </Router>;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 import ContentEditable from 'react-contenteditable';
 import css from './editor.css';
 import { IconUI } from '../../components/SemanticUI';
@@ -71,10 +72,10 @@ class Editor extends Component {
             <IconUI name="tag" className={css.icon} />
             <h6>Tags</h6>
           </div>
-          <div className={css.editorDanger}>
+          <Link to="/" className={css.editorDanger}>
             <IconUI name="trash" className={css.icon} />
             <h6>Delete</h6>
-          </div>
+          </Link>
         </div>
         <ContentEditable
           className={css.bigStoryBox}

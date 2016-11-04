@@ -35,7 +35,7 @@
   top: 0px;
 }
 
-.editorBar > div {
+.editorBar > div, .editorBar > a {
   width: 100px;
   height: 90px;
   cursor: pointer;
@@ -48,7 +48,7 @@
   color: #AAA;
 }
 
-.editorBar > div:hover {
+.editorBar > div:hover, .editorBar > a:hover {
   border: 2px solid #3FC380;
   transition: .5s;
   border-radius: 10px;
@@ -61,7 +61,7 @@
   border-color: #D91E18;
 }
 
-.editorBar > div > h6 {
+.editorBar > div > h6, .editorBar > a > h6 {
   width: 100%;
   font-size: 1em;
   text-align: center;
