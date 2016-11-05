@@ -17,8 +17,20 @@ This project uses global nodemon and webpack. Please install them globally on ur
 npm run dev
 ```
 
-## Run Production Server (WIP!)
+## Run Production Server
 
 ```javascript
 npm run prod
+```
+
+## API Test Suites
+
+```javascript
+npm run test-api
+```
+
+## React Test Suites
+
+```javascript
+npm run test-react
 ```
