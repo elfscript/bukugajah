@@ -22,12 +22,8 @@ SidebarNoteItem.propTypes = {
 }
 
 const Sidebar = (props) => {
-  let searchTerm = '';
-  if (typeof props.noteSearchTerm === 'string') {
-    searchTerm = props.noteSearchTerm;
-  }
-
-  const notesData = props.notesData.notesData;
+  const searchTerm = props.noteSearchTerm;
+  const notesData = props.notesData;
 
   const filteredNotesData = notesData.filter(
     dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)

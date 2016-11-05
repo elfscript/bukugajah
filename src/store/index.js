@@ -29,7 +29,14 @@ const mapDispatchToProps = dispatch => ({
     dispatch({
       type: ActionTypes.SET_NOTE_SEARCH_TERM,
       text: 'set search term for notes',
-      value: noteSearchTerm
+      value: noteSearchTerm,
+    })
+  },
+  addNote: (newNotesData) => {
+    dispatch({
+      type: ActionTypes.ADD_NOTE,
+      text: 'add a new note',
+      value: newNotesData,
     })
   },
 });

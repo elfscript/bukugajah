@@ -12,8 +12,8 @@ class Header extends Component {
   }
 
   handleSearchTerm(event) {
-    this.props.setNoteSearchTerm(event.target.value);
-    console.log('search term: ',this.props.noteSearchTerm);
+    this.props.setNoteSearchTerm(event.target.value); // from redux
+    console.log('search term: ', this.props.noteSearchTerm);
   }
 
   render() {

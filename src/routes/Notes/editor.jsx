@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import ContentEditable from 'react-contenteditable';
 import css from './editor.css';
 import { IconUI, CustomModalUI } from '../../components/SemanticUI';
 import { ActionBadgeUI } from '../../components/ReusableUI';
+import { connector } from '../../store';
 
 class Editor extends Component {
   constructor(props) {
@@ -69,6 +70,12 @@ class Editor extends Component {
       this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
       this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
       this.setState({ hasBeenSaved: true });
+
+      this.props.addNote({
+        title: this.state.newNoteTitle,
+        description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
+      }) // from redux
+
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     }
   }
@@ -172,4 +179,8 @@ class Editor extends Component {
   }
 }
 
-export default Editor;
+Editor.propTypes = {
+  addNote: PropTypes.func,
+}
+
+export default connector(Editor);

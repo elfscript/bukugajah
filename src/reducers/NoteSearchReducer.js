@@ -1,8 +1,6 @@
 import * as ActionTypes from '../constants';
 
-const initialState = {
-  noteSearchTerm: '',
-}
+const initialState = '';
 
 const setNoteSearchTerm = (state, action) => {
   let newState = '';
@@ -13,9 +11,9 @@ const setNoteSearchTerm = (state, action) => {
 const NoteSearchReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.SET_NOTE_SEARCH_TERM:
-      return setNoteSearchTerm(state, action)
+      return setNoteSearchTerm(state, action);
     default:
-      return state
+      return state;
   }
 }
 
