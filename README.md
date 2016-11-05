@@ -1,4 +1,4 @@
-# BukuGajah
+# BukuGajah :memo::elephant:
 BukuGajah, simple note-taking app! :memo: :elephant: Another rip-off app for learning purposes! :sunglasses:
 
 ## Installation
