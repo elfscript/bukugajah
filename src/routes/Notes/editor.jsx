@@ -123,7 +123,7 @@ class Editor extends Component {
         title: this.state.newNoteTitle,
         description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
       }) // from redux
-      
+
       this.setState({ hasBeenSaved: true }); // Show Saved button
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     } else { // Editor is in "Update Note" mode.
