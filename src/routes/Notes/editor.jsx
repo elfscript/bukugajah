@@ -10,8 +10,9 @@ class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newNoteTitle: 'Untitled Note',
+      newNoteTitle: '',
       newNoteContent: '',
+      thisNoteId: 0,
       noteWords: 0,
       currentSavedNoteTitle: '',
       currentSavedNoteContent: '',
@@ -28,6 +29,46 @@ class Editor extends Component {
     this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleNoteSave = this.handleNoteSave.bind(this);
     this.handleNoteDelete = this.handleNoteDelete.bind(this);
+  }
+
+  componentDidMount() {
+    // Update on Component Mount
+    const id = this.props.params.id;
+    if (id === undefined) {
+      this.setState({ newNoteTitle: 'Untitled Note' });
+    } else {
+      const currentNoteDataIndex = this.props.notesData.map(note => note.id).indexOf(id);
+      if (currentNoteDataIndex !== -1) {
+        const currentNoteData = this.props.notesData[currentNoteDataIndex];
+        this.setState({
+          newNoteTitle: currentNoteData.title,
+        });
+      } else {
+        console.log('404 NOT FOUND!');
+      }
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    // Update on Changes in Notes Link
+    const id = newProps.params.id;
+    if (id === undefined) {
+      this.setState({ newNoteTitle: 'Untitled Note' });
+    } else {
+      const currentNoteDataIndex = this.props.notesData
+        .map(note => note.id)
+        .indexOf(parseInt(id, 10));
+      if (currentNoteDataIndex !== -1) {
+        const currentNoteData = this.props.notesData[currentNoteDataIndex];
+        this.setState({
+          newNoteTitle: currentNoteData.title,
+          newNoteContent: currentNoteData.description,
+          thisNoteId: currentNoteData.id,
+        });
+      } else {
+        console.log('404 NOT FOUND!');
+      }
+    }
   }
 
   handleTitleChange(event) {
@@ -82,7 +123,10 @@ class Editor extends Component {
 
   handleNoteDelete() {
     this.setState({ hasBeenDeleted: true });
-    setTimeout(() => { this.setState({ hasBeenDeleted: false }); this.props.history.push('/'); }, 1000);
+    setTimeout(() => {
+      this.setState({ hasBeenDeleted: false });
+      this.props.history.push('/');
+    }, 1000);
   }
 
 

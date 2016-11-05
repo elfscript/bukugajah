@@ -14,6 +14,12 @@
   position: fixed;
 }
 
+.sidebar h2 {
+  font-family: 'Slabo 27px', serif;
+  color: #666;
+  padding-left: 10px;
+}
+
 .sidebarList {
   font-family: 'Abel', sans-serif;
   height: 500px;
@@ -37,23 +43,32 @@
   cursor: pointer;
 }
 
-.sidebarList > div {
+.sidebarList > a {
   border-bottom: 1px solid #DDD;
   padding: 20px;
   padding-left: 10px;
   transition: 0.5s;
   cursor: pointer;
+  height: auto !important;
+  width: 100% !important;
+  overflow: hidden;
+  display: block;
 }
 
-.sidebarList > div:hover {
+.sidebarList > a:hover {
   border-left: 10px solid #3FC380;
   transition: 0.5s;
+  color: #3FC380;
 }
 
-.sidebar h2 {
+.sidebarList > a:hover h2 {
+  color: #3FC380;
+}
+
+.sidebarList > a > h2 {
   font-family: 'Slabo 27px', serif;
   color: #666;
-  padding-left: 10px;
+  padding-left: 0px;
 }
 
 .addButton {

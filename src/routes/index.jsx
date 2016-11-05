@@ -6,7 +6,6 @@ import Notes from './Notes';
 
 import Editor from './Notes/editor';
 import ContentDefault from './Notes/contentDefault';
-// import Users from './Users';
 
 export default <Router history={hashHistory}>
   <Route
@@ -21,6 +20,10 @@ export default <Router history={hashHistory}>
       />
       <Route
         path="/editor"
+        component={Editor}
+      />
+      <Route
+        path="/editor/:id"
         component={Editor}
       />
     </Route>

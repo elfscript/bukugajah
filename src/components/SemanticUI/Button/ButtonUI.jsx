@@ -8,7 +8,10 @@ const ButtonUI = props => (
   );
 
 ButtonUI.propTypes = {
-  children: PropTypes.array,
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
   handleClick: PropTypes.func,
   className: PropTypes.string,
 }

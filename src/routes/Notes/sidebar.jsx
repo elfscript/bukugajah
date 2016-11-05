@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import css from './sidebar.css';
 import { ButtonUI, IconUI } from '../../components/SemanticUI';
@@ -6,19 +6,20 @@ import { ButtonUI, IconUI } from '../../components/SemanticUI';
 import { connector } from '../../store';
 
 const SidebarNoteItem = props => (
-  <div>
-    <Link className={css.noteLink}>{props.title}</Link>
+  <Link to={`/editor/${props.id}`}>
+    <h2 className={css.noteLink}>{props.title}</h2>
     <p className={css.textFaded}>{props.createdAt}</p>
     <p>
       {props.description}
     </p>
-  </div>
+  </Link>
 );
 
 SidebarNoteItem.propTypes = {
-  title: React.PropTypes.string,
-  createdAt: React.PropTypes.string,
-  description: React.PropTypes.string,
+  id: PropTypes.number,
+  title: PropTypes.string,
+  createdAt: PropTypes.string,
+  description: PropTypes.string,
 }
 
 const Sidebar = (props) => {
