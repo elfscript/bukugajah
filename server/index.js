@@ -1,6 +1,6 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
-// const ObjectId = require('mongodb').ObjectID;
+const objectId = require('mongodb').ObjectID;
 
 const app = express();
 const path = require('path');
@@ -23,6 +23,18 @@ app.get('/api/notes', (req, res) => {
       }
     });
 });
+
+app.get('/api/note/:id', (req, res) => {
+  db.collection('notes')
+    .find({ _id: objectId(req.params.id) })
+    .toArray((err, docs) => {
+      if (err) {
+        console.log('error ', err)
+      } else {
+        res.json(docs)
+      }
+    })
+})
 
 // MongoDB Connector
 MongoClient.connect('mongodb://localhost/bukugajahdb', (err, dbConnection) => {

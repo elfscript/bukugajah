@@ -3,8 +3,10 @@ const path = require('path')
 
 module.exports = {
   entry: {
-    app: ['webpack-dev-server/client?http://0.0.0.0:3000',
+    app: [
+      'webpack-dev-server/client?http://0.0.0.0:3000',
       'webpack/hot/only-dev-server',
+      'babel-polyfill',
       './src/index.jsx',
     ],
   },
