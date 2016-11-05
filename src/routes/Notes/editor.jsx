@@ -35,7 +35,11 @@ class Editor extends Component {
     // Update on Component Mount
     const id = this.props.params.id;
     if (id === undefined) {
-      this.setState({ newNoteTitle: 'Untitled Note' });
+      this.setState({
+        newNoteTitle: 'Untitled Note',
+        newNoteContent: '',
+        thisNoteId: 0,
+      });
     } else {
       const currentNoteDataIndex = this.props.notesData.map(note => note.id).indexOf(id);
       if (currentNoteDataIndex !== -1) {
@@ -52,9 +56,13 @@ class Editor extends Component {
   componentWillReceiveProps(newProps) {
     // Update on Changes in Notes Link
     const id = newProps.params.id;
-    if (id === undefined) {
-      this.setState({ newNoteTitle: 'Untitled Note' });
-    } else {
+    if (id === undefined) { // IF no id added / no unique id = new note in editor
+      this.setState({
+        newNoteTitle: 'Untitled Note',
+        newNoteContent: '',
+        thisNoteId: 0,
+      });
+    } else { // IF id is defined = load current note in editor
       const currentNoteDataIndex = this.props.notesData
         .map(note => note.id)
         .indexOf(parseInt(id, 10));
@@ -101,34 +109,40 @@ class Editor extends Component {
   }
 
   handleNoteSave() {
-    if (this.state.newNoteTitle === '') {
+    if (this.state.newNoteTitle === '') { // Title is empty
       this.setState({ newNoteValidation: { isTitleEmpty: true } });
       setTimeout(() => this.setState({ newNoteValidation: { isTitleEmpty: false } }), 1000);
-    } else if (this.state.newNoteContent === '') {
+    } else if (this.state.newNoteContent === '') { // Content is empty
       this.setState({ newNoteValidation: { isContentEmpty: true } });
       setTimeout(() => this.setState({ newNoteValidation: { isContentEmpty: false } }), 1000);
-    } else {
+    } else if (this.state.thisNoteId === 0) { // Editor is in "New Note" mode.
       this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
       this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
-      this.setState({ hasBeenSaved: true });
 
       this.props.addNote({
         title: this.state.newNoteTitle,
         description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
       }) // from redux
-
+      
+      this.setState({ hasBeenSaved: true }); // Show Saved button
+      setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
+    } else { // Editor is in "Update Note" mode.
+      this.setState({ hasBeenSaved: true }); // Show Saved button
+      console.log('prop update!');
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     }
   }
 
   handleNoteDelete() {
     this.setState({ hasBeenDeleted: true });
+    if (this.state.thisNoteId !== 0) { // IF current Editor is in Edit Mode.
+      console.log('has been deleted!');
+    }
     setTimeout(() => {
       this.setState({ hasBeenDeleted: false });
       this.props.history.push('/');
     }, 1000);
   }
-
 
   render() {
     return (
