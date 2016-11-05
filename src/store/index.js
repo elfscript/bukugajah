@@ -20,6 +20,7 @@ export const store = createStore(rootReducer);
 ))*/
 
 const mapStateToProps = state => ({
+  notesData: state.notesData,
   noteSearchTerm: state.noteSearchTerm,
 });
 

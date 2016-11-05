@@ -74,12 +74,20 @@
 .searchFilterContainer {
   position: absolute;
   top: 65px;
-  background: #F5F5F5;
-  width: 92%;
+  background: #FAFAFA;
+  width: 95%;
   padding: 5px;
+  border-bottom: 1px solid rgba(0,0,0, .1);
+  border-left: 3px solid #3FC380;
 }
 
 .searchFilter {
   font-family: 'Slabo 27px', serif;
   color: #3FC380;;
+}
+
+.sidebarNotFound {
+  text-align: center;
+  padding-top: 40px;
+  font-size: 2em;
 }

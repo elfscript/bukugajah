@@ -5,55 +5,6 @@ import { ButtonUI, IconUI } from '../../components/SemanticUI';
 
 import { connector } from '../../store';
 
-const dataNotes = [
-  {
-    id: 1,
-    title: 'My Future Nendos',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
-    createdAt: '20-20-2016',
-    updatedAt: '21-20-2016',
-    tags: ['casual', 'productivity', 'life'],
-    category: 'work',
-    images: ['menma', 'asuna'],
-  },
-  {
-    id: 2,
-    title: 'New Coding Agenda',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
-    createdAt: '20-20-2016',
-    updatedAt: '21-20-2016',
-    tags: ['casual', 'productivity', 'life'],
-    category: 'work',
-  },
-  {
-    id: 3,
-    title: 'Food List',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
-    createdAt: '20-20-2016',
-    updatedAt: '21-20-2016',
-    tags: ['casual', 'productivity', 'life'],
-    category: 'work',
-  },
-  {
-    id: 4,
-    title: 'My Own Novel Book',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
-    createdAt: '20-20-2016',
-    updatedAt: '21-20-2016',
-    tags: ['casual', 'productivity', 'life'],
-    category: 'work',
-  },
-  {
-    id: 5,
-    title: 'Bucket List',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.',
-    createdAt: '20-20-2016',
-    updatedAt: '21-20-2016',
-    tags: ['casual', 'productivity', 'life'],
-    category: 'work',
-  },
-];
-
 const SidebarNoteItem = props => (
   <div>
     <Link className={css.noteLink}>{props.title}</Link>
@@ -76,6 +27,12 @@ const Sidebar = (props) => {
     searchTerm = props.noteSearchTerm;
   }
 
+  const notesData = props.notesData.notesData;
+
+  const filteredNotesData = notesData.filter(
+    dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
+  );
+
   return (
     <div className={css.sidebar}>
       <h2>Notes</h2>
@@ -91,11 +48,11 @@ const Sidebar = (props) => {
       </p>
       <div className={css.sidebarList}>
         {
-          dataNotes.filter(
-            dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
-          ).map(
-            dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />
-          )
+          filteredNotesData.length < 1 ?
+            <h2 className={css.sidebarNotFound}>Not found</h2>
+            : filteredNotesData.map(
+              dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />
+            )
         }
       </div>
     </div>
