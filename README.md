@@ -1,5 +1,5 @@
 # BukuGajah
-Another rip-off app for learning purposes! :sunglasses:
+BukuGajah, simple note-taking app! :memo: :elephant: Another rip-off app for learning purposes! :sunglasses:
 
 ## Installation
 
