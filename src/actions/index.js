@@ -1,4 +1,4 @@
-import * as ActionTypes from '../constants';
+import * as ActionTypes from './constants';
 
 export const setNoteSearchTerm = (noteSearchTerm) => {
   dispatch({

@@ -1,8 +1,8 @@
-import { createStore } from 'redux'
-import { connect } from 'react-redux'
+import { createStore } from 'redux';
+import { connect } from 'react-redux';
 
-import rootReducer from '../reducers'
-import * as ActionTypes from '../constants'
+import rootReducer from '../reducers';
+import * as ActionTypes from '../actions/constants';
 
 /*
 BELOW IS ONLY FOR PRODUCTION

@@ -1,4 +1,4 @@
-import * as ActionTypes from '../constants';
+import * as ActionTypes from '../actions/constants';
 
 const initialState = require('json!../../public/notes.json');
 
