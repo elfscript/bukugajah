@@ -27,7 +27,10 @@ const updateNote = (state, updatedNoteData) => {
 }
 
 const deleteNote = (state, deletedNoteId) => {
-  return state;
+  const duplicatedState = state.map(note => note);
+  const deletedNoteIndex = duplicatedState.map(note => note.id).indexOf(deletedNoteId);
+  duplicatedState.splice(deletedNoteIndex, 1);
+  return duplicatedState;
 }
 
 const NotesReducer = (state = initialState, action) => {
@@ -37,7 +40,7 @@ const NotesReducer = (state = initialState, action) => {
     case ActionTypes.UPDATE_NOTE:
       return updateNote(state, action.value);
     case ActionTypes.DELETE_NOTE:
-      return updateNote(state, action.value);
+      return deleteNote(state, action.value);
     default:
       return state;
   }

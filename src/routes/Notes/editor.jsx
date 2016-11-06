@@ -10,7 +10,7 @@ class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newNoteTitle: '',
+      newNoteTitle: 'Untitled Note',
       newNoteContent: '',
       thisNoteId: 0,
       noteWords: 0,
@@ -33,29 +33,23 @@ class Editor extends Component {
 
   componentDidMount() {
     // Update on Component Mount
-    const id = this.props.params.id;
-    if (id === undefined) {
-      this.setState({
-        newNoteTitle: 'Untitled Note',
-        newNoteContent: '',
-        thisNoteId: 0,
-      });
-    } else {
+    const id = parseInt(this.props.params.id, 10);
+    if (id !== undefined) {
       const currentNoteDataIndex = this.props.notesData.map(note => note.id).indexOf(id);
       if (currentNoteDataIndex !== -1) {
         const currentNoteData = this.props.notesData[currentNoteDataIndex];
         this.setState({
           newNoteTitle: currentNoteData.title,
+          newNoteContent: currentNoteData.description,
+          thisNoteId: currentNoteData.id,
         });
-      } else {
-        console.log('404 NOT FOUND!');
       }
     }
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps(nextProps) {
     // Update on Changes in Notes Link
-    const id = newProps.params.id;
+    const id = nextProps.params.id;
     if (id === undefined) { // IF no id added / no unique id = new note in editor
       this.setState({
         newNoteTitle: 'Untitled Note',
@@ -122,8 +116,7 @@ class Editor extends Component {
       this.props.addNote({
         title: this.state.newNoteTitle,
         description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
-      }) // from redux
-
+      }); // from redux
       this.setState({ hasBeenSaved: true }); // Show Saved button
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     } else { // Editor is in "Update Note" mode.
@@ -133,9 +126,7 @@ class Editor extends Component {
         id: this.state.thisNoteId,
         title: this.state.newNoteTitle,
         description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
-      }) // from redux
-
-      console.log('prop update!');
+      }); // from redux
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     }
   }
@@ -143,7 +134,7 @@ class Editor extends Component {
   handleNoteDelete() {
     this.setState({ hasBeenDeleted: true });
     if (this.state.thisNoteId !== 0) { // IF current Editor is in Edit Mode.
-      console.log('has been deleted!');
+      this.props.deleteNote(this.state.thisNoteId);
     }
     setTimeout(() => {
       this.setState({ hasBeenDeleted: false });
@@ -181,7 +172,6 @@ class Editor extends Component {
         />
         <p>
           <span className={css.wordCount}>{this.state.noteWords} Word(s) long </span>
-          <span>{this.state.thisNoteId}</span>
           {
             this.state.hasChanges ?
               <span className={css.noteChangesFlag}>you have unsaved changes!</span>
@@ -248,6 +238,7 @@ class Editor extends Component {
 Editor.propTypes = {
   addNote: PropTypes.func,
   updateNote: PropTypes.func,
+  deleteNote: PropTypes.func,
 }
 
 export default connector(Editor);
