@@ -128,6 +128,13 @@ class Editor extends Component {
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     } else { // Editor is in "Update Note" mode.
       this.setState({ hasBeenSaved: true }); // Show Saved button
+
+      this.props.updateNote({
+        id: this.state.thisNoteId,
+        title: this.state.newNoteTitle,
+        description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
+      }) // from redux
+
       console.log('prop update!');
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     }
@@ -174,6 +181,7 @@ class Editor extends Component {
         />
         <p>
           <span className={css.wordCount}>{this.state.noteWords} Word(s) long </span>
+          <span>{this.state.thisNoteId}</span>
           {
             this.state.hasChanges ?
               <span className={css.noteChangesFlag}>you have unsaved changes!</span>
@@ -239,6 +247,7 @@ class Editor extends Component {
 
 Editor.propTypes = {
   addNote: PropTypes.func,
+  updateNote: PropTypes.func,
 }
 
 export default connector(Editor);

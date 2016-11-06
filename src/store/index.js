@@ -39,6 +39,20 @@ const mapDispatchToProps = dispatch => ({
       value: newNotesData,
     })
   },
+  updateNote: (updatedNotesData) => {
+    dispatch({
+      type: ActionTypes.UPDATE_NOTE,
+      text: 'update a note',
+      value: updatedNotesData,
+    })
+  },
+  deleteNote: (deleteNote) => {
+    dispatch({
+      type: ActionTypes.DELETE_NOTE,
+      text: 'delete a note',
+      value: deleteNote,
+    })
+  },
 });
 
 
