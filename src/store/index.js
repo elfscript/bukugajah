@@ -1,23 +1,25 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { connect } from 'react-redux';
+import thunk from 'redux-thunk';
 
 import rootReducer from '../reducers';
 import * as ActionTypes from '../actions/constants';
+import {
+  setNoteSearchTerm,
+  addNote,
+  updateNote,
+  deleteNote,
+} from '../actions';
 
-/*
-BELOW IS ONLY FOR PRODUCTION
-*/
-export const store = createStore(rootReducer);
-
-// BELOW IS FOR DEVELOPMENT
-/* export const store = createStore(
-    rootReducer,
-    initialState,
-    compose(
-      typeof window === 'object'
-      && typeof window.devToolsExtension !== 'undefined' ?
-        window.devToolsExtension() : (func) => func
-))*/
+export const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk),
+  compose(
+    typeof window === 'object'
+    && typeof window.devToolsExtension !== 'undefined' ?
+      window.devToolsExtension() : func => func
+  )
+);
 
 const mapStateToProps = state => ({
   notesData: state.notesData,
@@ -25,33 +27,29 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setNoteSearchTerm: (noteSearchTerm) => {
+  setNoteSearchTerm: noteSearchTerm => dispatch(setNoteSearchTerm(noteSearchTerm)),
+  addNote: newNotesData => dispatch(addNote(newNotesData)),
+  updateNote: updatedNotesData => dispatch(updateNote(updatedNotesData)),
+  addNodeleteNotete: deletedNoteDataId => dispatch(deleteNote(deletedNoteDataId)),
+  fetchNotes: () => {
     dispatch({
-      type: ActionTypes.SET_NOTE_SEARCH_TERM,
-      text: 'set search term for notes',
-      value: noteSearchTerm,
-    })
+      type: ActionTypes.FETCH_NOTES,
+      text: 'fetch from server',
+    });
   },
-  addNote: (newNotesData) => {
+  requestNotes: (notesData) => {
     dispatch({
-      type: ActionTypes.ADD_NOTE,
-      text: 'add a new note',
-      value: newNotesData,
-    })
+      type: ActionTypes.REQUEST_NOTES,
+      text: 'receive from server',
+      value: notesData,
+    });
   },
-  updateNote: (updatedNotesData) => {
+  receiveNotes: (notesData) => {
     dispatch({
-      type: ActionTypes.UPDATE_NOTE,
-      text: 'update a note',
-      value: updatedNotesData,
-    })
-  },
-  deleteNote: (deletedNoteId) => {
-    dispatch({
-      type: ActionTypes.DELETE_NOTE,
-      text: 'delete a note',
-      value: deletedNoteId,
-    })
+      type: ActionTypes.RECEIVE_NOTES,
+      text: 'receive from server',
+      value: notesData,
+    });
   },
 });
 

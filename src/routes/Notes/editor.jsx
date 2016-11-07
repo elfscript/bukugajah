@@ -113,6 +113,8 @@ class Editor extends Component {
       this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
       this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
 
+      // this.props.fetchNotes(); // from redux
+
       this.props.addNote({
         title: this.state.newNoteTitle,
         description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),

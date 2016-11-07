@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import css from './sidebar.css';
 import { ButtonUI, IconUI } from '../../components/SemanticUI';
@@ -22,38 +22,49 @@ SidebarNoteItem.propTypes = {
   description: PropTypes.string,
 }
 
-const Sidebar = (props) => {
-  const searchTerm = props.noteSearchTerm;
-  const notesData = props.notesData;
+class Sidebar extends Component {
 
-  const filteredNotesData = notesData.filter(
-    dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
-  );
+  constructor(props) {
+    super(props);
+  }
 
-  return (
-    <div className={css.sidebar}>
-      <h2>Notes</h2>
-      <Link to="/editor">
-        <ButtonUI className={css.addButton}>
-          <IconUI name="add circle" />
-          Add a New Note
-        </ButtonUI>
-      </Link>
-      <p className={css.searchFilterContainer}>
-        <span>Filter: </span>
-        <span className={css.searchFilter}>{searchTerm}</span>
-      </p>
-      <div className={css.sidebarList}>
-        {
-          filteredNotesData.length < 1 ?
-            <h2 className={css.sidebarNotFound}>Not found</h2>
-            : filteredNotesData.map(
-              dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />
-            )
-        }
+  componentDidMount() {
+    // this.props.fetchNotes(); // function from Redux
+  }
+
+  render() {
+    const searchTerm = this.props.noteSearchTerm; // from redux
+    const notesData = this.props.notesData; // from redux?
+
+    const filteredNotesData = notesData.filter(
+      dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
+    );
+
+    return (
+      <div className={css.sidebar}>
+        <h2>Notes</h2>
+        <Link to="/editor">
+          <ButtonUI className={css.addButton}>
+            <IconUI name="add circle" />
+            Add a New Note
+          </ButtonUI>
+        </Link>
+        <p className={css.searchFilterContainer}>
+          <span>Filter: </span>
+          <span className={css.searchFilter}>{searchTerm}</span>
+        </p>
+        <div className={css.sidebarList}>
+          {
+            filteredNotesData.length < 1 ?
+              <h2 className={css.sidebarNotFound}>Not found</h2>
+              : filteredNotesData.map(
+                dataNote => <SidebarNoteItem key={dataNote.id} {...dataNote} />
+              )
+          }
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default connector(Sidebar);

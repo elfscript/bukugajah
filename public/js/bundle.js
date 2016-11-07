@@ -38782,8 +38782,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	// import Users from './Users';
-
 	exports.default = _react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
@@ -38803,6 +38801,10 @@
 	      }),
 	      _react2.default.createElement(_reactRouter.Route, {
 	        path: '/editor',
+	        component: _editor2.default
+	      }),
+	      _react2.default.createElement(_reactRouter.Route, {
+	        path: '/editor/:id',
 	        component: _editor2.default
 	      })
 	    )
@@ -44440,7 +44442,7 @@
 	  _createClass(Header, [{
 	    key: 'handleSearchTerm',
 	    value: function handleSearchTerm(event) {
-	      this.props.setNoteSearchTerm(event.target.value);
+	      this.props.setNoteSearchTerm(event.target.value); // from redux
 	      console.log('search term: ', this.props.noteSearchTerm);
 	    }
 	  }, {
@@ -75905,6 +75907,29 @@
 	        text: 'set search term for notes',
 	        value: noteSearchTerm
 	      });
+	    },
+	    addNote: function addNote(newNotesData) {
+	      dispatch({
+	        type: ActionTypes.ADD_NOTE,
+	        text: 'add a new note',
+	        value: newNotesData
+	      });
+
+	      console.log('test new note!');
+	    },
+	    updateNote: function updateNote(updatedNotesData) {
+	      dispatch({
+	        type: ActionTypes.UPDATE_NOTE,
+	        text: 'update a note',
+	        value: updatedNotesData
+	      });
+	    },
+	    deleteNote: function deleteNote(deletedNoteId) {
+	      dispatch({
+	        type: ActionTypes.DELETE_NOTE,
+	        text: 'delete a note',
+	        value: deletedNoteId
+	      });
 	    }
 	  };
 	};
@@ -75953,12 +75978,49 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var notesData = __webpack_require__(1136);
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var initialState = { notesData: notesData };
+	var initialState = __webpack_require__(1136);
 
-	var getNotes = function getNotes(state) {
-	  return state;
+	var addNote = function addNote(state, newNoteData) {
+	  var newNote = {
+	    id: state.reduce(function (maxId, note) {
+	      return Math.max(note.id, maxId);
+	    }, -1) + 1,
+	    title: newNoteData.title,
+	    description: newNoteData.description,
+	    createdAt: '20-20-2016',
+	    updatedAt: '21-20-2016',
+	    tags: ['casual'],
+	    category: 'work',
+	    images: ['menma']
+	  };
+
+	  return [newNote].concat(_toConsumableArray(state));
+	};
+
+	var updateNote = function updateNote(state, updatedNoteData) {
+	  var duplicatedState = state.map(function (note) {
+	    return note;
+	  });
+	  var updateNoteId = updatedNoteData.id;
+	  var updateNoteIndex = duplicatedState.map(function (note) {
+	    return note.id;
+	  }).indexOf(updateNoteId);
+	  duplicatedState[updateNoteIndex].title = updatedNoteData.title;
+	  duplicatedState[updateNoteIndex].description = updatedNoteData.description;
+	  return duplicatedState;
+	};
+
+	var deleteNote = function deleteNote(state, deletedNoteId) {
+	  var duplicatedState = state.map(function (note) {
+	    return note;
+	  });
+	  var deletedNoteIndex = duplicatedState.map(function (note) {
+	    return note.id;
+	  }).indexOf(deletedNoteId);
+	  duplicatedState.splice(deletedNoteIndex, 1);
+	  return duplicatedState;
 	};
 
 	var NotesReducer = function NotesReducer() {
@@ -75966,8 +76028,12 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case ActionTypes.GET_NOTES:
-	      return getNotes(state);
+	    case ActionTypes.ADD_NOTE:
+	      return addNote(state, action.value);
+	    case ActionTypes.UPDATE_NOTE:
+	      return updateNote(state, action.value);
+	    case ActionTypes.DELETE_NOTE:
+	      return deleteNote(state, action.value);
 	    default:
 	      return state;
 	  }
@@ -75984,8 +76050,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var SET_NEW_NOTE = exports.SET_NEW_NOTE = 'SetNewNote';
+	// Notes Constants
+	var ADD_NOTE = exports.ADD_NOTE = 'AddNote';
 	var GET_NOTES = exports.GET_NOTES = 'GetNotes';
+	var UPDATE_NOTE = exports.UPDATE_NOTE = 'updateNote';
+	var DELETE_NOTE = exports.DELETE_NOTE = 'deleteNote';
+
+	// Search Constants
 	var SET_NOTE_SEARCH_TERM = exports.SET_NOTE_SEARCH_TERM = 'SetNoteSearchTerm';
 
 /***/ },
@@ -76091,9 +76162,7 @@
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	var initialState = {
-	  noteSearchTerm: ''
-	};
+	var initialState = '';
 
 	var setNoteSearchTerm = function setNoteSearchTerm(state, action) {
 	  var newState = '';
@@ -76259,10 +76328,10 @@
 
 	var SidebarNoteItem = function SidebarNoteItem(props) {
 	  return _react2.default.createElement(
-	    'div',
-	    null,
+	    _reactRouter.Link,
+	    { to: '/editor/' + props.id },
 	    _react2.default.createElement(
-	      _reactRouter.Link,
+	      'h2',
 	      { className: _sidebar2.default.noteLink },
 	      props.title
 	    ),
@@ -76280,18 +76349,15 @@
 	};
 
 	SidebarNoteItem.propTypes = {
-	  title: _react2.default.PropTypes.string,
-	  createdAt: _react2.default.PropTypes.string,
-	  description: _react2.default.PropTypes.string
+	  id: _react.PropTypes.number,
+	  title: _react.PropTypes.string,
+	  createdAt: _react.PropTypes.string,
+	  description: _react.PropTypes.string
 	};
 
 	var Sidebar = function Sidebar(props) {
-	  var searchTerm = '';
-	  if (typeof props.noteSearchTerm === 'string') {
-	    searchTerm = props.noteSearchTerm;
-	  }
-
-	  var notesData = props.notesData.notesData;
+	  var searchTerm = props.noteSearchTerm;
+	  var notesData = props.notesData;
 
 	  var filteredNotesData = notesData.filter(function (dataNote) {
 	    return dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
@@ -76380,7 +76446,7 @@
 
 
 	// module
-	exports.push([module.id, ".sidebar__textFaded___1RLbO {\n  color:#aaa !important;\n}\n\n.sidebar__sidebar___2BLCR {\n  font-family: 'Slabo 27px', serif;\n  width: 400px;\n  border-right: 1px solid #DDD;\n  padding-left: 20px;\n  padding-top: 20px;\n  margin-top: -20px;\n  display: inline-block;\n  height: 100%;\n  position: fixed;\n}\n\n.sidebar__sidebarList___3Bf1l {\n  font-family: 'Abel', sans-serif;\n  height: 500px;\n  overflow-y: auto;\n  border-top: 1px solid #DDD;\n  border-bottom: 1px solid #DDD;\n  padding-top:20px;\n}\n\n.sidebar__sidebarList___3Bf1l p {\n  font-family: 'Roboto Condensed', sans-serif;\n  line-height: 1.2;\n  font-size: 1em;\n  font-weight: lighter;\n  color: #999;\n}\n\n.sidebar__noteLink___3fgXt, .sidebar__noteLink___3fgXt:hover {\n  color: #3FC380;\n  font-size: 1.5em;\n  cursor: pointer;\n}\n\n.sidebar__sidebarList___3Bf1l > div {\n  border-bottom: 1px solid #DDD;\n  padding: 20px;\n  padding-left: 10px;\n  transition: 0.5s;\n  cursor: pointer;\n}\n\n.sidebar__sidebarList___3Bf1l > div:hover {\n  border-left: 10px solid #3FC380;\n  transition: 0.5s;\n}\n\n.sidebar__sidebar___2BLCR h2 {\n  font-family: 'Slabo 27px', serif;\n  color: #666;\n  padding-left: 10px;\n}\n\n.sidebar__addButton___2h2Qv {\n  position: absolute !important;\n  right: 5px;\n  top: 15px;\n  background: #3FC380 !important;\n  color: #FFF !important;\n  border: 1px solid #FFF !important;\n}\n\n.sidebar__addButton___2h2Qv:hover {\n  background: #FFF !important;\n  color: #3FC380 !important;\n  border: 1px solid #3FC380 !important;\n}\n\n.sidebar__searchFilterContainer___3j4Yh {\n  position: absolute;\n  top: 65px;\n  background: #FAFAFA;\n  width: 95%;\n  padding: 5px;\n  border-bottom: 1px solid rgba(0,0,0, .1);\n  border-left: 3px solid #3FC380;\n}\n\n.sidebar__searchFilter___3-TXr {\n  font-family: 'Slabo 27px', serif;\n  color: #3FC380;;\n}\n\n.sidebar__sidebarNotFound___6VLZ3 {\n  text-align: center;\n  padding-top: 40px;\n  font-size: 2em;\n}\n", ""]);
+	exports.push([module.id, ".sidebar__textFaded___1RLbO {\n  color:#aaa !important;\n}\n\n.sidebar__sidebar___2BLCR {\n  font-family: 'Slabo 27px', serif;\n  width: 400px;\n  border-right: 1px solid #DDD;\n  padding-left: 20px;\n  padding-top: 20px;\n  margin-top: -20px;\n  display: inline-block;\n  height: 100%;\n  position: fixed;\n}\n\n.sidebar__sidebar___2BLCR h2 {\n  font-family: 'Slabo 27px', serif;\n  color: #666;\n  padding-left: 10px;\n}\n\n.sidebar__sidebarList___3Bf1l {\n  font-family: 'Abel', sans-serif;\n  height: 500px;\n  overflow-y: auto;\n  border-top: 1px solid #DDD;\n  border-bottom: 1px solid #DDD;\n  padding-top:20px;\n}\n\n.sidebar__sidebarList___3Bf1l p {\n  font-family: 'Roboto Condensed', sans-serif;\n  line-height: 1.2;\n  font-size: 1em;\n  font-weight: lighter;\n  color: #999;\n}\n\n.sidebar__noteLink___3fgXt, .sidebar__noteLink___3fgXt:hover {\n  color: #3FC380;\n  font-size: 1.5em;\n  cursor: pointer;\n}\n\n.sidebar__sidebarList___3Bf1l > a {\n  border-bottom: 1px solid #DDD;\n  padding: 20px;\n  padding-left: 10px;\n  transition: 0.5s;\n  cursor: pointer;\n  height: auto !important;\n  width: 100% !important;\n  overflow: hidden;\n  display: block;\n}\n\n.sidebar__sidebarList___3Bf1l > a:hover {\n  border-left: 10px solid #3FC380;\n  transition: 0.5s;\n  color: #3FC380;\n}\n\n.sidebar__sidebarList___3Bf1l > a:hover h2 {\n  color: #3FC380;\n}\n\n.sidebar__sidebarList___3Bf1l > a > h2 {\n  font-family: 'Slabo 27px', serif;\n  color: #666;\n  padding-left: 0px;\n}\n\n.sidebar__addButton___2h2Qv {\n  position: absolute !important;\n  right: 5px;\n  top: 15px;\n  background: #3FC380 !important;\n  color: #FFF !important;\n  border: 1px solid #FFF !important;\n}\n\n.sidebar__addButton___2h2Qv:hover {\n  background: #FFF !important;\n  color: #3FC380 !important;\n  border: 1px solid #3FC380 !important;\n}\n\n.sidebar__searchFilterContainer___3j4Yh {\n  position: absolute;\n  top: 65px;\n  background: #FAFAFA;\n  width: 95%;\n  padding: 5px;\n  border-bottom: 1px solid rgba(0,0,0, .1);\n  border-left: 3px solid #3FC380;\n}\n\n.sidebar__searchFilter___3-TXr {\n  font-family: 'Slabo 27px', serif;\n  color: #3FC380;;\n}\n\n.sidebar__sidebarNotFound___6VLZ3 {\n  text-align: center;\n  padding-top: 40px;\n  font-size: 2em;\n}\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -76465,7 +76531,7 @@
 	};
 
 	ButtonUI.propTypes = {
-	  children: _react.PropTypes.array,
+	  children: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.array]),
 	  handleClick: _react.PropTypes.func,
 	  className: _react.PropTypes.string
 	};
@@ -76706,6 +76772,8 @@
 
 	var _ReusableUI = __webpack_require__(1155);
 
+	var _store = __webpack_require__(1132);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -76725,6 +76793,7 @@
 	    _this.state = {
 	      newNoteTitle: 'Untitled Note',
 	      newNoteContent: '',
+	      thisNoteId: 0,
 	      noteWords: 0,
 	      currentSavedNoteTitle: '',
 	      currentSavedNoteContent: '',
@@ -76745,6 +76814,54 @@
 	  }
 
 	  _createClass(Editor, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // Update on Component Mount
+	      var id = parseInt(this.props.params.id, 10);
+	      if (id !== undefined) {
+	        var currentNoteDataIndex = this.props.notesData.map(function (note) {
+	          return note.id;
+	        }).indexOf(id);
+	        if (currentNoteDataIndex !== -1) {
+	          var currentNoteData = this.props.notesData[currentNoteDataIndex];
+	          this.setState({
+	            newNoteTitle: currentNoteData.title,
+	            newNoteContent: currentNoteData.description,
+	            thisNoteId: currentNoteData.id
+	          });
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      // Update on Changes in Notes Link
+	      var id = nextProps.params.id;
+	      if (id === undefined) {
+	        // IF no id added / no unique id = new note in editor
+	        this.setState({
+	          newNoteTitle: 'Untitled Note',
+	          newNoteContent: '',
+	          thisNoteId: 0
+	        });
+	      } else {
+	        // IF id is defined = load current note in editor
+	        var currentNoteDataIndex = this.props.notesData.map(function (note) {
+	          return note.id;
+	        }).indexOf(parseInt(id, 10));
+	        if (currentNoteDataIndex !== -1) {
+	          var currentNoteData = this.props.notesData[currentNoteDataIndex];
+	          this.setState({
+	            newNoteTitle: currentNoteData.title,
+	            newNoteContent: currentNoteData.description,
+	            thisNoteId: currentNoteData.id
+	          });
+	        } else {
+	          console.log('404 NOT FOUND!');
+	        }
+	      }
+	    }
+	  }, {
 	    key: 'handleTitleChange',
 	    value: function handleTitleChange(event) {
 	      var noteTitleValue = event.target.value;
@@ -76783,19 +76900,39 @@
 	      var _this2 = this;
 
 	      if (this.state.newNoteTitle === '') {
+	        // Title is empty
 	        this.setState({ newNoteValidation: { isTitleEmpty: true } });
 	        setTimeout(function () {
 	          return _this2.setState({ newNoteValidation: { isTitleEmpty: false } });
 	        }, 1000);
 	      } else if (this.state.newNoteContent === '') {
+	        // Content is empty
 	        this.setState({ newNoteValidation: { isContentEmpty: true } });
 	        setTimeout(function () {
 	          return _this2.setState({ newNoteValidation: { isContentEmpty: false } });
 	        }, 1000);
-	      } else {
+	      } else if (this.state.thisNoteId === 0) {
+	        // Editor is in "New Note" mode.
 	        this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
 	        this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
-	        this.setState({ hasBeenSaved: true });
+
+	        this.props.addNote({
+	          title: this.state.newNoteTitle,
+	          description: this.state.newNoteContent.replace(/&nbsp;/g, ' ')
+	        }); // from redux
+	        this.setState({ hasBeenSaved: true }); // Show Saved button
+	        setTimeout(function () {
+	          _this2.setState({ hasBeenSaved: false });
+	        }, 1000);
+	      } else {
+	        // Editor is in "Update Note" mode.
+	        this.setState({ hasBeenSaved: true }); // Show Saved button
+
+	        this.props.updateNote({
+	          id: this.state.thisNoteId,
+	          title: this.state.newNoteTitle,
+	          description: this.state.newNoteContent.replace(/&nbsp;/g, ' ')
+	        }); // from redux
 	        setTimeout(function () {
 	          _this2.setState({ hasBeenSaved: false });
 	        }, 1000);
@@ -76807,8 +76944,13 @@
 	      var _this3 = this;
 
 	      this.setState({ hasBeenDeleted: true });
+	      if (this.state.thisNoteId !== 0) {
+	        // IF current Editor is in Edit Mode.
+	        this.props.deleteNote(this.state.thisNoteId);
+	      }
 	      setTimeout(function () {
-	        _this3.setState({ hasBeenDeleted: false });_this3.props.history.push('/');
+	        _this3.setState({ hasBeenDeleted: false });
+	        _this3.props.history.push('/');
 	      }, 1000);
 	    }
 	  }, {
@@ -76944,7 +77086,13 @@
 	  return Editor;
 	}(_react.Component);
 
-	exports.default = Editor;
+	Editor.propTypes = {
+	  addNote: _react.PropTypes.func,
+	  updateNote: _react.PropTypes.func,
+	  deleteNote: _react.PropTypes.func
+	};
+
+	exports.default = (0, _store.connector)(Editor);
 
 /***/ },
 /* 1152 */
