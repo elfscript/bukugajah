@@ -38768,15 +38768,15 @@
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _Notes = __webpack_require__(1138);
+	var _Notes = __webpack_require__(1141);
 
 	var _Notes2 = _interopRequireDefault(_Notes);
 
-	var _editor = __webpack_require__(1151);
+	var _editor = __webpack_require__(1154);
 
 	var _editor2 = _interopRequireDefault(_editor);
 
-	var _contentDefault = __webpack_require__(1159);
+	var _contentDefault = __webpack_require__(1162);
 
 	var _contentDefault2 = _interopRequireDefault(_contentDefault);
 
@@ -44443,7 +44443,6 @@
 	    key: 'handleSearchTerm',
 	    value: function handleSearchTerm(event) {
 	      this.props.setNoteSearchTerm(event.target.value); // from redux
-	      console.log('search term: ', this.props.noteSearchTerm);
 	    }
 	  }, {
 	    key: 'render',
@@ -75861,36 +75860,39 @@
 	});
 	exports.connector = exports.store = undefined;
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _redux = __webpack_require__(551);
 
 	var _reactRedux = __webpack_require__(544);
 
-	var _reducers = __webpack_require__(1133);
+	var _reduxThunk = __webpack_require__(1133);
+
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+
+	__webpack_require__(1134);
+
+	var _reducers = __webpack_require__(1135);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _constants = __webpack_require__(1135);
+	var _constants = __webpack_require__(1137);
 
 	var ActionTypes = _interopRequireWildcard(_constants);
+
+	var _apis = __webpack_require__(1139);
+
+	var API = _interopRequireWildcard(_apis);
+
+	var _actions = __webpack_require__(1140);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	/*
-	BELOW IS ONLY FOR PRODUCTION
-	*/
-	var store = exports.store = (0, _redux.createStore)(_reducers2.default);
-
-	// BELOW IS FOR DEVELOPMENT
-	/* export const store = createStore(
-	    rootReducer,
-	    initialState,
-	    compose(
-	      typeof window === 'object'
-	      && typeof window.devToolsExtension !== 'undefined' ?
-	        window.devToolsExtension() : (func) => func
-	))*/
+	var store = exports.store = (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default), (0, _redux.compose)((typeof window === 'undefined' ? 'undefined' : _typeof(window)) === 'object' && typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : function (func) {
+	  return func;
+	}));
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
@@ -75902,33 +75904,36 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    setNoteSearchTerm: function setNoteSearchTerm(noteSearchTerm) {
-	      dispatch({
-	        type: ActionTypes.SET_NOTE_SEARCH_TERM,
-	        text: 'set search term for notes',
-	        value: noteSearchTerm
-	      });
+	      return dispatch((0, _actions.setNoteSearchTerm)(noteSearchTerm));
 	    },
 	    addNote: function addNote(newNotesData) {
-	      dispatch({
-	        type: ActionTypes.ADD_NOTE,
-	        text: 'add a new note',
-	        value: newNotesData
-	      });
-
-	      console.log('test new note!');
+	      return dispatch((0, _actions.addNote)(newNotesData));
 	    },
 	    updateNote: function updateNote(updatedNotesData) {
-	      dispatch({
-	        type: ActionTypes.UPDATE_NOTE,
-	        text: 'update a note',
-	        value: updatedNotesData
-	      });
+	      return dispatch((0, _actions.updateNote)(updatedNotesData));
 	    },
-	    deleteNote: function deleteNote(deletedNoteId) {
+	    addNodeleteNotete: function addNodeleteNotete(deletedNoteDataId) {
+	      return dispatch((0, _actions.deleteNote)(deletedNoteDataId));
+	    },
+	    fetchNotes: function fetchNotes() {
 	      dispatch({
-	        type: ActionTypes.DELETE_NOTE,
-	        text: 'delete a note',
-	        value: deletedNoteId
+	        type: ActionTypes.RECEIVE_NOTES,
+	        text: 'fetch from server',
+	        notesData: []
+	      });
+	      fetch(API.FETCH_NOTES, {
+	        method: 'GET',
+	        mode: 'cors'
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        dispatch({
+	          type: ActionTypes.RECEIVE_NOTES,
+	          text: 'fetch from server',
+	          notesData: json
+	        });
+	      }).catch(function (ex) {
+	        console.log('parsing failed', ex);
 	      });
 	    }
 	  };
@@ -75938,6 +75943,473 @@
 
 /***/ },
 /* 1133 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	exports.__esModule = true;
+	function createThunkMiddleware(extraArgument) {
+	  return function (_ref) {
+	    var dispatch = _ref.dispatch;
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        if (typeof action === 'function') {
+	          return action(dispatch, getState, extraArgument);
+	        }
+
+	        return next(action);
+	      };
+	    };
+	  };
+	}
+
+	var thunk = createThunkMiddleware();
+	thunk.withExtraArgument = createThunkMiddleware;
+
+	exports['default'] = thunk;
+
+/***/ },
+/* 1134 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+
+	  if (self.fetch) {
+	    return
+	  }
+
+	  var support = {
+	    searchParams: 'URLSearchParams' in self,
+	    iterable: 'Symbol' in self && 'iterator' in Symbol,
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob()
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+
+	  // Build a destructive iterator for the value list
+	  function iteratorFor(items) {
+	    var iterator = {
+	      next: function() {
+	        var value = items.shift()
+	        return {done: value === undefined, value: value}
+	      }
+	    }
+
+	    if (support.iterable) {
+	      iterator[Symbol.iterator] = function() {
+	        return iterator
+	      }
+	    }
+
+	    return iterator
+	  }
+
+	  function Headers(headers) {
+	    this.map = {}
+
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+
+	  Headers.prototype.keys = function() {
+	    var items = []
+	    this.forEach(function(value, name) { items.push(name) })
+	    return iteratorFor(items)
+	  }
+
+	  Headers.prototype.values = function() {
+	    var items = []
+	    this.forEach(function(value) { items.push(value) })
+	    return iteratorFor(items)
+	  }
+
+	  Headers.prototype.entries = function() {
+	    var items = []
+	    this.forEach(function(value, name) { items.push([name, value]) })
+	    return iteratorFor(items)
+	  }
+
+	  if (support.iterable) {
+	    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
+	  }
+
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+
+	  function Body() {
+	    this.bodyUsed = false
+
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+	        this._bodyText = body.toString()
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+	          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+	        }
+	      }
+	    }
+
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+
+	    return this
+	  }
+
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = (xhr.getAllResponseHeaders() || '').trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+
+	  Body.call(Request.prototype)
+
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+
+	  Body.call(Response.prototype)
+
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+
+	  self.Headers = Headers
+	  self.Request = Request
+	  self.Response = Response
+
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+
+	      var xhr = new XMLHttpRequest()
+
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+
+	        return
+	      }
+
+	      xhr.onload = function() {
+	        var options = {
+	          status: xhr.status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText
+	        resolve(new Response(body, options))
+	      }
+
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+
+	      xhr.ontimeout = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+
+	      xhr.open(request.method, request.url, true)
+
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 1135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75948,11 +76420,11 @@
 
 	var _redux = __webpack_require__(551);
 
-	var _NotesReducer = __webpack_require__(1134);
+	var _NotesReducer = __webpack_require__(1136);
 
 	var _NotesReducer2 = _interopRequireDefault(_NotesReducer);
 
-	var _NoteSearchReducer = __webpack_require__(1137);
+	var _NoteSearchReducer = __webpack_require__(1138);
 
 	var _NoteSearchReducer2 = _interopRequireDefault(_NoteSearchReducer);
 
@@ -75963,7 +76435,7 @@
 	exports.default = rootReducer;
 
 /***/ },
-/* 1134 */
+/* 1136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75972,7 +76444,11 @@
 	  value: true
 	});
 
-	var _constants = __webpack_require__(1135);
+	__webpack_require__(1134);
+
+	var _reactRedux = __webpack_require__(544);
+
+	var _constants = __webpack_require__(1137);
 
 	var ActionTypes = _interopRequireWildcard(_constants);
 
@@ -75980,7 +76456,11 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	var initialState = __webpack_require__(1136);
+	var initialState = [];
+
+	var receiveNotes = function receiveNotes(state, jsonNoteData) {
+	  return [].concat(_toConsumableArray(jsonNoteData), _toConsumableArray(state));
+	};
 
 	var addNote = function addNote(state, newNoteData) {
 	  var newNote = {
@@ -76028,6 +76508,8 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
+	    case ActionTypes.RECEIVE_NOTES:
+	      return receiveNotes(state, action.notesData);
 	    case ActionTypes.ADD_NOTE:
 	      return addNote(state, action.value);
 	    case ActionTypes.UPDATE_NOTE:
@@ -76042,7 +76524,7 @@
 	exports.default = NotesReducer;
 
 /***/ },
-/* 1135 */
+/* 1137 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -76051,103 +76533,17 @@
 	  value: true
 	});
 	// Notes Constants
+	var FETCH_NOTES = exports.FETCH_NOTES = 'FetchNotes';
+	var RECEIVE_NOTES = exports.RECEIVE_NOTES = 'ReceiveNotes';
 	var ADD_NOTE = exports.ADD_NOTE = 'AddNote';
-	var GET_NOTES = exports.GET_NOTES = 'GetNotes';
-	var UPDATE_NOTE = exports.UPDATE_NOTE = 'updateNote';
-	var DELETE_NOTE = exports.DELETE_NOTE = 'deleteNote';
+	var UPDATE_NOTE = exports.UPDATE_NOTE = 'UpdateNote';
+	var DELETE_NOTE = exports.DELETE_NOTE = 'DeleteNote';
 
 	// Search Constants
 	var SET_NOTE_SEARCH_TERM = exports.SET_NOTE_SEARCH_TERM = 'SetNoteSearchTerm';
 
 /***/ },
-/* 1136 */
-/***/ function(module, exports) {
-
-	module.exports = [
-		{
-			"id": 1,
-			"title": "Foodies Guide",
-			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.",
-			"createdAt": "20-20-2016",
-			"updatedAt": "21-20-2016",
-			"tags": [
-				"casual",
-				"productivity"
-			],
-			"category": "work",
-			"images": [
-				"menma",
-				"asuna"
-			]
-		},
-		{
-			"id": 2,
-			"title": "Game Lounge 101",
-			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.",
-			"createdAt": "20-20-2016",
-			"updatedAt": "21-20-2016",
-			"tags": [
-				"casual",
-				"productivity"
-			],
-			"category": "work",
-			"images": [
-				"menma",
-				"asuna"
-			]
-		},
-		{
-			"id": 3,
-			"title": "Book a Book",
-			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.",
-			"createdAt": "20-20-2016",
-			"updatedAt": "21-20-2016",
-			"tags": [
-				"casual",
-				"productivity"
-			],
-			"category": "work",
-			"images": [
-				"menma",
-				"asuna"
-			]
-		},
-		{
-			"id": 4,
-			"title": "Rental List",
-			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.",
-			"createdAt": "20-20-2016",
-			"updatedAt": "21-20-2016",
-			"tags": [
-				"casual",
-				"productivity"
-			],
-			"category": "work",
-			"images": [
-				"menma",
-				"asuna"
-			]
-		},
-		{
-			"id": 5,
-			"title": "Travel Plans",
-			"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sine ea igitur iucunde negat posse se vivere? Nescio quo modo praetervolavit oratio. Non dolere, inquam, istud quam vim habeat postea videro; Ita enim vivunt.",
-			"createdAt": "20-20-2016",
-			"updatedAt": "21-20-2016",
-			"tags": [
-				"casual",
-				"productivity"
-			],
-			"category": "work",
-			"images": [
-				"menma",
-				"asuna"
-			]
-		}
-	];
-
-/***/ },
-/* 1137 */
+/* 1138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76156,7 +76552,7 @@
 	  value: true
 	});
 
-	var _constants = __webpack_require__(1135);
+	var _constants = __webpack_require__(1137);
 
 	var ActionTypes = _interopRequireWildcard(_constants);
 
@@ -76185,7 +76581,82 @@
 	exports.default = NoteSearchReducer;
 
 /***/ },
-/* 1138 */
+/* 1139 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	// API Constants
+	var FETCH_NOTES = exports.FETCH_NOTES = 'https://localhost:5000/api/notes';
+
+/***/ },
+/* 1140 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.fetchNotesLoading = exports.requestNotes = exports.deleteNote = exports.updateNote = exports.addNote = exports.setNoteSearchTerm = undefined;
+
+	var _constants = __webpack_require__(1137);
+
+	var ActionTypes = _interopRequireWildcard(_constants);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var setNoteSearchTerm = exports.setNoteSearchTerm = function setNoteSearchTerm(noteSearchTerm) {
+	  return {
+	    type: ActionTypes.SET_NOTE_SEARCH_TERM,
+	    text: 'set search term for notes',
+	    value: noteSearchTerm
+	  };
+	};
+
+	var addNote = exports.addNote = function addNote(newNotesData) {
+	  return {
+	    type: ActionTypes.ADD_NOTE,
+	    text: 'add a new note',
+	    value: newNotesData
+	  };
+	};
+
+	var updateNote = exports.updateNote = function updateNote(updatedNoteData) {
+	  return {
+	    type: ActionTypes.UPDATE_NOTE,
+	    text: 'update a note',
+	    value: updatedNoteData
+	  };
+	};
+
+	var deleteNote = exports.deleteNote = function deleteNote(deletedNoteDataId) {
+	  return {
+	    type: ActionTypes.DELETE_NOTE,
+	    text: 'delete a note',
+	    value: deletedNoteDataId
+	  };
+	};
+
+	var requestNotes = exports.requestNotes = function requestNotes(notes) {
+	  return {
+	    type: ActionTypes.REQUEST_NOTES,
+	    notes: notes
+	  };
+	};
+
+	var fetchNotesLoading = exports.fetchNotesLoading = function fetchNotesLoading(notes) {
+	  return {
+	    type: ActionTypes.FETCH_NOTES_LOADING,
+	    notes: notes
+	  };
+	};
+
+/***/ },
+/* 1141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76200,11 +76671,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _index = __webpack_require__(1139);
+	var _index = __webpack_require__(1142);
 
 	var _index2 = _interopRequireDefault(_index);
 
-	var _sidebar = __webpack_require__(1141);
+	var _sidebar = __webpack_require__(1144);
 
 	var _sidebar2 = _interopRequireDefault(_sidebar);
 
@@ -76256,13 +76727,13 @@
 	exports.default = Notes;
 
 /***/ },
-/* 1139 */
+/* 1142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(1140);
+	var content = __webpack_require__(1143);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(1131)(content, {});
@@ -76282,7 +76753,7 @@
 	}
 
 /***/ },
-/* 1140 */
+/* 1143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1130)();
@@ -76299,7 +76770,7 @@
 	};
 
 /***/ },
-/* 1141 */
+/* 1144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76310,21 +76781,29 @@
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(373);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRouter = __webpack_require__(574);
 
-	var _sidebar = __webpack_require__(1142);
+	var _sidebar = __webpack_require__(1145);
 
 	var _sidebar2 = _interopRequireDefault(_sidebar);
 
-	var _SemanticUI = __webpack_require__(1144);
+	var _SemanticUI = __webpack_require__(1147);
 
 	var _store = __webpack_require__(1132);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var SidebarNoteItem = function SidebarNoteItem(props) {
 	  return _react2.default.createElement(
@@ -76355,70 +76834,90 @@
 	  description: _react.PropTypes.string
 	};
 
-	var Sidebar = function Sidebar(props) {
-	  var searchTerm = props.noteSearchTerm;
-	  var notesData = props.notesData;
+	var Sidebar = function (_Component) {
+	  _inherits(Sidebar, _Component);
 
-	  var filteredNotesData = notesData.filter(function (dataNote) {
-	    return dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
-	  });
+	  function Sidebar(props) {
+	    _classCallCheck(this, Sidebar);
 
-	  return _react2.default.createElement(
-	    'div',
-	    { className: _sidebar2.default.sidebar },
-	    _react2.default.createElement(
-	      'h2',
-	      null,
-	      'Notes'
-	    ),
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: '/editor' },
-	      _react2.default.createElement(
-	        _SemanticUI.ButtonUI,
-	        { className: _sidebar2.default.addButton },
-	        _react2.default.createElement(_SemanticUI.IconUI, { name: 'add circle' }),
-	        'Add a New Note'
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'p',
-	      { className: _sidebar2.default.searchFilterContainer },
-	      _react2.default.createElement(
-	        'span',
-	        null,
-	        'Filter: '
-	      ),
-	      _react2.default.createElement(
-	        'span',
-	        { className: _sidebar2.default.searchFilter },
-	        searchTerm
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { className: _sidebar2.default.sidebarList },
-	      filteredNotesData.length < 1 ? _react2.default.createElement(
-	        'h2',
-	        { className: _sidebar2.default.sidebarNotFound },
-	        'Not found'
-	      ) : filteredNotesData.map(function (dataNote) {
-	        return _react2.default.createElement(SidebarNoteItem, _extends({ key: dataNote.id }, dataNote));
-	      })
-	    )
-	  );
-	};
+	    return _possibleConstructorReturn(this, (Sidebar.__proto__ || Object.getPrototypeOf(Sidebar)).call(this, props));
+	  }
+
+	  _createClass(Sidebar, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // this.props.fetchNotes(); // function from Redux
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var searchTerm = this.props.noteSearchTerm; // from redux
+	      var notesData = this.props.notesData; // from redux?
+
+	      var filteredNotesData = notesData.filter(function (dataNote) {
+	        return dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: _sidebar2.default.sidebar },
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'Notes'
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/editor' },
+	          _react2.default.createElement(
+	            _SemanticUI.ButtonUI,
+	            { className: _sidebar2.default.addButton },
+	            _react2.default.createElement(_SemanticUI.IconUI, { name: 'add circle' }),
+	            'Add a New Note'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          { className: _sidebar2.default.searchFilterContainer },
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            'Filter: '
+	          ),
+	          _react2.default.createElement(
+	            'span',
+	            { className: _sidebar2.default.searchFilter },
+	            searchTerm
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: _sidebar2.default.sidebarList },
+	          filteredNotesData.length < 1 ? _react2.default.createElement(
+	            'h2',
+	            { className: _sidebar2.default.sidebarNotFound },
+	            'Not found'
+	          ) : filteredNotesData.map(function (dataNote) {
+	            return _react2.default.createElement(SidebarNoteItem, _extends({ key: dataNote.id }, dataNote));
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Sidebar;
+	}(_react.Component);
 
 	exports.default = (0, _store.connector)(Sidebar);
 
 /***/ },
-/* 1142 */
+/* 1145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(1143);
+	var content = __webpack_require__(1146);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(1131)(content, {});
@@ -76438,7 +76937,7 @@
 	}
 
 /***/ },
-/* 1143 */
+/* 1146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1130)();
@@ -76461,7 +76960,7 @@
 	};
 
 /***/ },
-/* 1144 */
+/* 1147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76471,27 +76970,27 @@
 	});
 	exports.CustomModalUI = exports.ModalUI = exports.IconUI = exports.CardSimpleUI = exports.InputUI = exports.ButtonUI = undefined;
 
-	var _ButtonUI = __webpack_require__(1145);
+	var _ButtonUI = __webpack_require__(1148);
 
 	var _ButtonUI2 = _interopRequireDefault(_ButtonUI);
 
-	var _InputUI = __webpack_require__(1146);
+	var _InputUI = __webpack_require__(1149);
 
 	var _InputUI2 = _interopRequireDefault(_InputUI);
 
-	var _IconUI = __webpack_require__(1147);
+	var _IconUI = __webpack_require__(1150);
 
 	var _IconUI2 = _interopRequireDefault(_IconUI);
 
-	var _ModalUI = __webpack_require__(1148);
+	var _ModalUI = __webpack_require__(1151);
 
 	var _ModalUI2 = _interopRequireDefault(_ModalUI);
 
-	var _CustomModalUI = __webpack_require__(1149);
+	var _CustomModalUI = __webpack_require__(1152);
 
 	var _CustomModalUI2 = _interopRequireDefault(_CustomModalUI);
 
-	var _CardSimpleUI = __webpack_require__(1150);
+	var _CardSimpleUI = __webpack_require__(1153);
 
 	var _CardSimpleUI2 = _interopRequireDefault(_CardSimpleUI);
 
@@ -76505,7 +77004,7 @@
 	exports.CustomModalUI = _CustomModalUI2.default;
 
 /***/ },
-/* 1145 */
+/* 1148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76539,7 +77038,7 @@
 	exports.default = ButtonUI;
 
 /***/ },
-/* 1146 */
+/* 1149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76568,7 +77067,7 @@
 	exports.default = InputUI;
 
 /***/ },
-/* 1147 */
+/* 1150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76597,7 +77096,7 @@
 	exports.default = IconUI;
 
 /***/ },
-/* 1148 */
+/* 1151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76656,7 +77155,7 @@
 	exports.default = ModalUI;
 
 /***/ },
-/* 1149 */
+/* 1152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76713,7 +77212,7 @@
 	exports.default = CustomModalUI;
 
 /***/ },
-/* 1150 */
+/* 1153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76743,7 +77242,7 @@
 	exports.default = CardUISimple;
 
 /***/ },
-/* 1151 */
+/* 1154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -76760,17 +77259,17 @@
 
 	var _reactRouter = __webpack_require__(574);
 
-	var _reactContenteditable = __webpack_require__(1152);
+	var _reactContenteditable = __webpack_require__(1155);
 
 	var _reactContenteditable2 = _interopRequireDefault(_reactContenteditable);
 
-	var _editor = __webpack_require__(1153);
+	var _editor = __webpack_require__(1156);
 
 	var _editor2 = _interopRequireDefault(_editor);
 
-	var _SemanticUI = __webpack_require__(1144);
+	var _SemanticUI = __webpack_require__(1147);
 
-	var _ReusableUI = __webpack_require__(1155);
+	var _ReusableUI = __webpack_require__(1158);
 
 	var _store = __webpack_require__(1132);
 
@@ -76793,7 +77292,7 @@
 	    _this.state = {
 	      newNoteTitle: 'Untitled Note',
 	      newNoteContent: '',
-	      thisNoteId: 0,
+	      thisNoteId: -1,
 	      noteWords: 0,
 	      currentSavedNoteTitle: '',
 	      currentSavedNoteContent: '',
@@ -76817,6 +77316,8 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      // Update on Component Mount
+	      this.props.fetchNotes(); // from redux
+
 	      var id = parseInt(this.props.params.id, 10);
 	      if (id !== undefined) {
 	        var currentNoteDataIndex = this.props.notesData.map(function (note) {
@@ -76842,7 +77343,7 @@
 	        this.setState({
 	          newNoteTitle: 'Untitled Note',
 	          newNoteContent: '',
-	          thisNoteId: 0
+	          thisNoteId: -1
 	        });
 	      } else {
 	        // IF id is defined = load current note in editor
@@ -76911,7 +77412,7 @@
 	        setTimeout(function () {
 	          return _this2.setState({ newNoteValidation: { isContentEmpty: false } });
 	        }, 1000);
-	      } else if (this.state.thisNoteId === 0) {
+	      } else if (this.state.thisNoteId === -1) {
 	        // Editor is in "New Note" mode.
 	        this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
 	        this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
@@ -77095,7 +77596,7 @@
 	exports.default = (0, _store.connector)(Editor);
 
 /***/ },
-/* 1152 */
+/* 1155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -77199,13 +77700,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 1153 */
+/* 1156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(1154);
+	var content = __webpack_require__(1157);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(1131)(content, {});
@@ -77225,7 +77726,7 @@
 	}
 
 /***/ },
-/* 1154 */
+/* 1157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1130)();
@@ -77249,7 +77750,7 @@
 	};
 
 /***/ },
-/* 1155 */
+/* 1158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -77259,7 +77760,7 @@
 	});
 	exports.ActionBadgeUI = undefined;
 
-	var _ActionBadgeUI = __webpack_require__(1156);
+	var _ActionBadgeUI = __webpack_require__(1159);
 
 	var _ActionBadgeUI2 = _interopRequireDefault(_ActionBadgeUI);
 
@@ -77268,7 +77769,7 @@
 	exports.ActionBadgeUI = _ActionBadgeUI2.default;
 
 /***/ },
-/* 1156 */
+/* 1159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -77281,7 +77782,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _style = __webpack_require__(1157);
+	var _style = __webpack_require__(1160);
 
 	var _style2 = _interopRequireDefault(_style);
 
@@ -77310,13 +77811,13 @@
 	exports.default = ActionBadge;
 
 /***/ },
-/* 1157 */
+/* 1160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(1158);
+	var content = __webpack_require__(1161);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(1131)(content, {});
@@ -77336,7 +77837,7 @@
 	}
 
 /***/ },
-/* 1158 */
+/* 1161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1130)();
@@ -77354,7 +77855,7 @@
 	};
 
 /***/ },
-/* 1159 */
+/* 1162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -77367,11 +77868,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _contentDefault = __webpack_require__(1160);
+	var _contentDefault = __webpack_require__(1163);
 
 	var _contentDefault2 = _interopRequireDefault(_contentDefault);
 
-	var _SemanticUI = __webpack_require__(1144);
+	var _SemanticUI = __webpack_require__(1147);
 
 	var _reactRouter = __webpack_require__(574);
 
@@ -77415,13 +77916,13 @@
 	exports.default = ContentDefault;
 
 /***/ },
-/* 1160 */
+/* 1163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(1161);
+	var content = __webpack_require__(1164);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(1131)(content, {});
@@ -77441,7 +77942,7 @@
 	}
 
 /***/ },
-/* 1161 */
+/* 1164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(1130)();

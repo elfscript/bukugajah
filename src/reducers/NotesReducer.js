@@ -1,22 +1,9 @@
-import fetch from 'whatwg-fetch';
-import { dispatch } from 'react-redux';
+import 'whatwg-fetch';
 import * as ActionTypes from '../actions/constants';
-
-const initialState2 = require('json!../../public/notes.json');
 
 const initialState = [];
 
 const receiveNotes = (state, jsonNoteData) => [...jsonNoteData, ...state];
-
-const fetchNotes = (state, actionValue) => {
-  requestNotes(state);
-  return fetch('http://localhost:5000/api/notes', {
-    method: 'GET',
-    mode: 'cors',
-  })
-    .then(response => response.json())
-    .then((json) => { console.log(json); dispatch(receiveNotes(state, json)); })
-};
 
 const addNote = (state, newNoteData) => {
   const newNote = {
@@ -51,12 +38,8 @@ const deleteNote = (state, deletedNoteId) => {
 
 const NotesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ActionTypes.FETCH_NOTES:
-      return fetchNotes(state, action.value);
-    case ActionTypes.REQUEST_NOTES:
-      return state;
     case ActionTypes.RECEIVE_NOTES:
-      return receiveNotes(state, action.value);
+      return receiveNotes(state, action.notesData);
     case ActionTypes.ADD_NOTE:
       return addNote(state, action.value);
     case ActionTypes.UPDATE_NOTE:

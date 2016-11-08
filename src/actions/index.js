@@ -28,3 +28,8 @@ export const requestNotes = notes => ({
   type: ActionTypes.REQUEST_NOTES,
   notes,
 })
+
+export const fetchNotesLoading = notes => ({
+  type: ActionTypes.FETCH_NOTES_LOADING,
+  notes,
+})

@@ -6,7 +6,19 @@
         "import"
     ],
     "rules": {
+        "no-console": ["off"],
         "semi": ["off", "always"],
-        "quotes": ["error", "single"]
+        "quotes": ["error", "single"],
+        "key-spacing": ["error", { "mode": "minimum" }],
+        "no-undef": ["error", { "typeof": true }],
+        "no-multi-spaces": ["off", {
+          "exceptions": {
+            "VariableDeclarator": true,
+            "ImportDeclaration": true,
+            "Property": true,
+            "BinaryExpression": true
+            }
+        }],
+        "forbid-prop-types": ["off", { "forbid": ["any", "object"] }]
     }
 }

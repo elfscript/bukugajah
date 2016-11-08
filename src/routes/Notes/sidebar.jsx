@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import css from './sidebar.css';
-import { ButtonUI, IconUI } from '../../components/SemanticUI';
+import React, { Component, PropTypes }  from 'react';
+import { Link }                         from 'react-router';
 
-import { connector } from '../../store';
+import css                  from './sidebar.css';
+import { ButtonUI, IconUI } from '../../components/SemanticUI';
+import { connector }        from '../../store';
 
 const SidebarNoteItem = props => (
   <Link to={`/editor/${props.id}`}>
@@ -16,20 +16,16 @@ const SidebarNoteItem = props => (
 );
 
 SidebarNoteItem.propTypes = {
-  id: PropTypes.number,
-  title: PropTypes.string,
-  createdAt: PropTypes.string,
-  description: PropTypes.string,
+  id:           PropTypes.number,
+  title:        PropTypes.string,
+  createdAt:    PropTypes.string,
+  description:  PropTypes.string,
 }
 
 class Sidebar extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
-    // this.props.fetchNotes(); // function from Redux
+    this.props.fetchNotes(); // from redux
   }
 
   render() {
@@ -65,6 +61,10 @@ class Sidebar extends Component {
       </div>
     );
   }
+}
+
+Sidebar.propTypes = {
+  fetchNotes: PropTypes.func,
 }
 
 export default connector(Sidebar);

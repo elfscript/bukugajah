@@ -1,38 +1,38 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
-import ContentEditable from 'react-contenteditable';
-import css from './editor.css';
-import { IconUI, CustomModalUI } from '../../components/SemanticUI';
-import { ActionBadgeUI } from '../../components/ReusableUI';
-import { connector } from '../../store';
+import React, { Component, PropTypes }  from 'react';
+import { Link }                         from 'react-router';
+import ContentEditable                  from 'react-contenteditable';
+
+import css                        from './editor.css';
+import { IconUI, CustomModalUI }  from '../../components/SemanticUI';
+import { ActionBadgeUI }          from '../../components/ReusableUI';
+import { connector }              from '../../store';
 
 class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newNoteTitle: 'Untitled Note',
-      newNoteContent: '',
-      thisNoteId: -1,
-      noteWords: 0,
-      currentSavedNoteTitle: '',
-      currentSavedNoteContent: '',
-      hasChanges: true,
-      hasBeenSaved: false,
-      hasBeenDeleted: false,
+      newNoteTitle:             'Untitled Note',
+      newNoteContent:           '',
+      thisNoteId:               -1,
+      noteWords:                0,
+      currentSavedNoteTitle:    '',
+      currentSavedNoteContent:  '',
+      hasChanges:               true,
+      hasBeenSaved:             false,
+      hasBeenDeleted:           false,
       newNoteValidation: {
-        isTitleEmpty: false,
+        isTitleEmpty:   false,
         isContentEmpty: false,
       },
-    }
+    };
 
-    this.handleTitleChange = this.handleTitleChange.bind(this);
-    this.handleNoteChange = this.handleNoteChange.bind(this);
-    this.handleNoteSave = this.handleNoteSave.bind(this);
-    this.handleNoteDelete = this.handleNoteDelete.bind(this);
+    this.handleTitleChange  = this.handleTitleChange.bind(this);
+    this.handleNoteChange   = this.handleNoteChange.bind(this);
+    this.handleNoteSave     = this.handleNoteSave.bind(this);
+    this.handleNoteDelete   = this.handleNoteDelete.bind(this);
   }
 
   componentDidMount() {
-    // Update on Component Mount
     const id = parseInt(this.props.params.id, 10);
     if (id !== undefined) {
       const currentNoteDataIndex = this.props.notesData.map(note => note.id).indexOf(id);
@@ -105,29 +105,38 @@ class Editor extends Component {
   handleNoteSave() {
     if (this.state.newNoteTitle === '') { // Title is empty
       this.setState({ newNoteValidation: { isTitleEmpty: true } });
-      setTimeout(() => this.setState({ newNoteValidation: { isTitleEmpty: false } }), 1000);
+      setTimeout(() => this.setState({
+        newNoteValidation: {
+          isTitleEmpty: false,
+        },
+      }), 1000);
     } else if (this.state.newNoteContent === '') { // Content is empty
       this.setState({ newNoteValidation: { isContentEmpty: true } });
-      setTimeout(() => this.setState({ newNoteValidation: { isContentEmpty: false } }), 1000);
+      setTimeout(() => this.setState({
+        newNoteValidation: {
+          isContentEmpty: false,
+        },
+      }), 1000);
     } else if (this.state.thisNoteId === -1) { // Editor is in "New Note" mode.
       this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
       this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
 
-      // this.props.fetchNotes(); // from redux
-
       this.props.addNote({
-        title: this.state.newNoteTitle,
-        description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
+        title:        this.state.newNoteTitle,
+        description:  this.state.newNoteContent.replace(/&nbsp;/g, ' '),
       }); // from redux
+
       this.setState({ hasBeenSaved: true }); // Show Saved button
-      setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
+      setTimeout(() => {
+        this.setState({ hasBeenSaved: false })
+      }, 1000);
     } else { // Editor is in "Update Note" mode.
       this.setState({ hasBeenSaved: true }); // Show Saved button
 
       this.props.updateNote({
-        id: this.state.thisNoteId,
-        title: this.state.newNoteTitle,
-        description: this.state.newNoteContent.replace(/&nbsp;/g, ' '),
+        id:           this.state.thisNoteId,
+        title:        this.state.newNoteTitle,
+        description:  this.state.newNoteContent.replace(/&nbsp;/g, ' '),
       }); // from redux
       setTimeout(() => { this.setState({ hasBeenSaved: false }) }, 1000);
     }
@@ -238,9 +247,10 @@ class Editor extends Component {
 }
 
 Editor.propTypes = {
-  addNote: PropTypes.func,
+  addNote:    PropTypes.func,
   updateNote: PropTypes.func,
   deleteNote: PropTypes.func,
+  notesData:  PropTypes.array,
 }
 
 export default connector(Editor);

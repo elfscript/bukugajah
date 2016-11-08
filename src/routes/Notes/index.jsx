@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import css from './index.css';
 
-import Sidebar from './sidebar';
+import css      from './index.css';
+import Sidebar  from './sidebar';
 
 class Notes extends Component {
   constructor(props) {
     super(props);
     this.state = {
       newNoteBool: false,
-    }
+    };
   }
 
   render() {

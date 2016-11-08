@@ -1,10 +1,14 @@
-import React from 'react';
-import { Router, Route, hashHistory, IndexRoute } from 'react-router';
+import React  from 'react';
+import {
+  Router,
+  Route,
+  hashHistory,
+  IndexRoute,
+}             from 'react-router';
 
-import Layout from '../components/Layout/index';
-import Notes from './Notes';
-
-import Editor from './Notes/editor';
+import Layout         from '../components/Layout/index';
+import Notes          from './Notes';
+import Editor         from './Notes/editor';
 import ContentDefault from './Notes/contentDefault';
 
 export default <Router history={hashHistory}>

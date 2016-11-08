@@ -1,8 +1,8 @@
-import React from 'react';
-import css from './contentDefault.css';
-import { ButtonUI, IconUI } from '../../components/SemanticUI';
+import React    from 'react';
 import { Link } from 'react-router';
 
+import css                  from './contentDefault.css';
+import { ButtonUI, IconUI } from '../../components/SemanticUI';
 
 const ContentDefault = () => (
   <div className={css.contentDefaultWrapper}>

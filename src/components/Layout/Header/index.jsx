@@ -1,8 +1,9 @@
-import React, { PropTypes, Component } from 'react';
-import { Link } from 'react-router';
-import SearchInputUI from '../../SemanticUI/Input/SearchInputUI';
-import css from './header.css';
-import { connector } from '../../../store';
+import React, { PropTypes, Component }  from 'react';
+import { Link }                         from 'react-router';
+
+import SearchInputUI  from '../../SemanticUI/Input/SearchInputUI';
+import css            from './header.css';
+import { connector }  from '../../../store';
 
 class Header extends Component {
 
