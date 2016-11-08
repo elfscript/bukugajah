@@ -12,7 +12,7 @@ class Editor extends Component {
     this.state = {
       newNoteTitle: 'Untitled Note',
       newNoteContent: '',
-      thisNoteId: 0,
+      thisNoteId: -1,
       noteWords: 0,
       currentSavedNoteTitle: '',
       currentSavedNoteContent: '',
@@ -54,7 +54,7 @@ class Editor extends Component {
       this.setState({
         newNoteTitle: 'Untitled Note',
         newNoteContent: '',
-        thisNoteId: 0,
+        thisNoteId: -1,
       });
     } else { // IF id is defined = load current note in editor
       const currentNoteDataIndex = this.props.notesData
@@ -109,7 +109,7 @@ class Editor extends Component {
     } else if (this.state.newNoteContent === '') { // Content is empty
       this.setState({ newNoteValidation: { isContentEmpty: true } });
       setTimeout(() => this.setState({ newNoteValidation: { isContentEmpty: false } }), 1000);
-    } else if (this.state.thisNoteId === 0) { // Editor is in "New Note" mode.
+    } else if (this.state.thisNoteId === -1) { // Editor is in "New Note" mode.
       this.setState({ hasChanges: false, currentSavedNoteTitle: this.state.newNoteTitle });
       this.setState({ hasChanges: false, currentSavedNoteContent: this.state.newNoteContent });
 

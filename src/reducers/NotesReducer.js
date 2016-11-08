@@ -34,7 +34,7 @@ const addNote = (state, newNoteData) => {
 }
 
 const updateNote = (state, updatedNoteData) => {
-  let duplicatedState = state.map(note => note);
+  const duplicatedState = state.map(note => note);
   const updateNoteId = updatedNoteData.id;
   const updateNoteIndex = duplicatedState.map(note => note.id).indexOf(updateNoteId);
   duplicatedState[updateNoteIndex].title = updatedNoteData.title;
