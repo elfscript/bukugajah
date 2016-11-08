@@ -23,3 +23,8 @@ export const deleteNote = deletedNoteDataId => ({
   text: 'delete a note',
   value: deletedNoteDataId,
 });
+
+export const requestNotes = notes => ({
+  type: ActionTypes.REQUEST_NOTES,
+  notes,
+})

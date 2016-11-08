@@ -6,8 +6,6 @@ const initialState2 = require('json!../../public/notes.json');
 
 const initialState = [];
 
-const requestNotes = (state, actionValue) => { console.log('test', state); return state };
-
 const receiveNotes = (state, jsonNoteData) => [...jsonNoteData, ...state];
 
 const fetchNotes = (state, actionValue) => {
@@ -56,7 +54,7 @@ const NotesReducer = (state = initialState, action) => {
     case ActionTypes.FETCH_NOTES:
       return fetchNotes(state, action.value);
     case ActionTypes.REQUEST_NOTES:
-      return requestNotes(state, action.value);
+      return state;
     case ActionTypes.RECEIVE_NOTES:
       return receiveNotes(state, action.value);
     case ActionTypes.ADD_NOTE:
