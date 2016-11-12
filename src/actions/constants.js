@@ -1,3 +1,5 @@
+// ACTION CONSTANTS
+
 // Notes Constants
 export const FETCH_NOTES          = 'FetchNotes';
 export const RECEIVE_NOTES        = 'ReceiveNotes';

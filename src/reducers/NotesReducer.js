@@ -1,4 +1,5 @@
 import 'whatwg-fetch';
+
 import * as ActionTypes from '../actions/constants';
 
 const initialState = [];
