@@ -6,7 +6,7 @@
       "import"
     ],
     "rules": {
-      "no-did-mount-set-state": ["off"],
+      "no-did-mount-set-state": ["off", "always"],
       "no-console": ["off"],
       "semi": ["off", "always"],
       "quotes": ["error", "single"],
@@ -24,6 +24,7 @@
     },
     "globals": {
       "document": true,
+      "window": true,
       "fetch": true
     }
 }
