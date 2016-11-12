@@ -37011,12 +37011,6 @@
 	  );
 	};
 
-	/*
-	AppContainer.propTypes = {
-	  store: PropTypes.object,
-	}
-	*/
-
 	exports.default = AppContainer;
 
 /***/ },
@@ -76446,8 +76440,6 @@
 
 	__webpack_require__(1134);
 
-	var _reactRedux = __webpack_require__(544);
-
 	var _constants = __webpack_require__(1137);
 
 	var ActionTypes = _interopRequireWildcard(_constants);
@@ -76535,10 +76527,10 @@
 	// Notes Constants
 	var FETCH_NOTES = exports.FETCH_NOTES = 'FetchNotes';
 	var RECEIVE_NOTES = exports.RECEIVE_NOTES = 'ReceiveNotes';
+	var FETCH_NOTE_DETAILS = exports.FETCH_NOTE_DETAILS = 'FetchNoteDetails';
 	var ADD_NOTE = exports.ADD_NOTE = 'AddNote';
 	var UPDATE_NOTE = exports.UPDATE_NOTE = 'UpdateNote';
 	var DELETE_NOTE = exports.DELETE_NOTE = 'DeleteNote';
-
 	// Search Constants
 	var SET_NOTE_SEARCH_TERM = exports.SET_NOTE_SEARCH_TERM = 'SetNoteSearchTerm';
 
@@ -76590,7 +76582,8 @@
 	  value: true
 	});
 	// API Constants
-	var FETCH_NOTES = exports.FETCH_NOTES = 'https://localhost:5000/api/notes';
+	var FETCH_NOTES = exports.FETCH_NOTES = 'http://localhost:5000/api/notes/';
+	var FETCH_NOTE_DETAILS = exports.FETCH_NOTE_DETAILS = 'http://localhost:5000/api/note/';
 
 /***/ },
 /* 1140 */
@@ -76837,16 +76830,16 @@
 	var Sidebar = function (_Component) {
 	  _inherits(Sidebar, _Component);
 
-	  function Sidebar(props) {
+	  function Sidebar() {
 	    _classCallCheck(this, Sidebar);
 
-	    return _possibleConstructorReturn(this, (Sidebar.__proto__ || Object.getPrototypeOf(Sidebar)).call(this, props));
+	    return _possibleConstructorReturn(this, (Sidebar.__proto__ || Object.getPrototypeOf(Sidebar)).apply(this, arguments));
 	  }
 
 	  _createClass(Sidebar, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      // this.props.fetchNotes(); // function from Redux
+	      this.props.fetchNotes(); // from redux
 	    }
 	  }, {
 	    key: 'render',
@@ -76907,6 +76900,10 @@
 
 	  return Sidebar;
 	}(_react.Component);
+
+	Sidebar.propTypes = {
+	  fetchNotes: _react.PropTypes.func
+	};
 
 	exports.default = (0, _store.connector)(Sidebar);
 
@@ -77315,9 +77312,6 @@
 	  _createClass(Editor, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      // Update on Component Mount
-	      this.props.fetchNotes(); // from redux
-
 	      var id = parseInt(this.props.params.id, 10);
 	      if (id !== undefined) {
 	        var currentNoteDataIndex = this.props.notesData.map(function (note) {
@@ -77404,13 +77398,21 @@
 	        // Title is empty
 	        this.setState({ newNoteValidation: { isTitleEmpty: true } });
 	        setTimeout(function () {
-	          return _this2.setState({ newNoteValidation: { isTitleEmpty: false } });
+	          return _this2.setState({
+	            newNoteValidation: {
+	              isTitleEmpty: false
+	            }
+	          });
 	        }, 1000);
 	      } else if (this.state.newNoteContent === '') {
 	        // Content is empty
 	        this.setState({ newNoteValidation: { isContentEmpty: true } });
 	        setTimeout(function () {
-	          return _this2.setState({ newNoteValidation: { isContentEmpty: false } });
+	          return _this2.setState({
+	            newNoteValidation: {
+	              isContentEmpty: false
+	            }
+	          });
 	        }, 1000);
 	      } else if (this.state.thisNoteId === -1) {
 	        // Editor is in "New Note" mode.
@@ -77421,6 +77423,7 @@
 	          title: this.state.newNoteTitle,
 	          description: this.state.newNoteContent.replace(/&nbsp;/g, ' ')
 	        }); // from redux
+
 	        this.setState({ hasBeenSaved: true }); // Show Saved button
 	        setTimeout(function () {
 	          _this2.setState({ hasBeenSaved: false });
@@ -77590,7 +77593,8 @@
 	Editor.propTypes = {
 	  addNote: _react.PropTypes.func,
 	  updateNote: _react.PropTypes.func,
-	  deleteNote: _react.PropTypes.func
+	  deleteNote: _react.PropTypes.func,
+	  notesData: _react.PropTypes.array
 	};
 
 	exports.default = (0, _store.connector)(Editor);
@@ -77734,7 +77738,7 @@
 
 
 	// module
-	exports.push([module.id, ".editor__bigStoryBox___3EjVt {\n  width: 100%;\n  height: 450px;\n  max-height: 500px;\n  border: 0;\n  outline: 0;\n  padding-top: 20px;\n  border-top: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n  font-size: 1.2em;\n  color: #666;\n  line-height: 35px;\n  overflow-y: auto;\n  padding-bottom: 100px;\n}\n\n[contentEditable=true]:empty:not(:focus):before{\n    content:attr(data-placeholder);\n    cursor: text;\n    color: #AAA;\n}\n\n.editor__titleStoryBox___2iRiE {\n  padding: 10px 0px;\n  border: 0;\n  outline: 0;\n  font-family: 'Slabo 27px', serif;\n  font-size: 2em;\n  color: #3FC380;\n}\n\n.editor__editorBar___2WRUm {\n  position: absolute !important;\n  right: 30px;\n  top: 0px;\n}\n\n.editor__editorBar___2WRUm > div, .editor__editorBar___2WRUm > a {\n  width: 100px;\n  height: 90px;\n  cursor: pointer;\n  padding: 0px;\n  padding-bottom: -10px;\n  border: 2px solid #FFF;\n  transition: .1s;\n  float: left;\n  opacity: 0.8;\n  color: #AAA;\n}\n\n.editor__editorBar___2WRUm > .editor__editorButton___3BdHI:hover, .editor__editorBar___2WRUm > a:hover {\n  border: 2px solid #3FC380;\n  transition: .5s;\n  border-radius: 10px;\n  opacity: 1;\n  color: #3FC380;\n}\n\n.editor__editorBar___2WRUm .editor__editorDanger___2m5jm:hover {\n  color: #D91E18;\n  border-color: #D91E18;\n}\n\n.editor__editorBar___2WRUm > div h6, .editor__editorBar___2WRUm > a h6 {\n  width: 100%;\n  font-size: 1em;\n  text-align: center;\n  padding: 0;\n  margin-top: 0px;\n  font-weight: normal;\n  text-transform: uppercase;\n}\n\n.editor__editorBar___2WRUm .editor__icon___IbBf5 {\n  font-size: 3em;\n  width: 100%;\n  margin-top: 20px;\n}\n\n.editor__tagInput___2qlTq {\n  position: absolute !important;\n  right: 30px;\n  top: 30px;\n}\n\n.editor__wordCount___3aUQE {\n  color: #aaa;\n}\n\n.editor__noteChangesFlag___1eXy8 {\n  background: #AAA;\n  color: #FFF;\n  padding: 3px 20px;\n  margin-left: 10px;\n  border-radius: 12px;\n  opacity: 0.6;\n}\n", ""]);
+	exports.push([module.id, ".editor__bigStoryBox___3EjVt {\n  width:      100%;\n  height:     450px;\n  max-height: 500px;\n  border: 0;\n  outline: 0;\n  padding-top: 20px;\n  border-top: 1px solid #f5f5f5;\n  border-bottom: 1px solid #f5f5f5;\n  font-size: 1.2em;\n  color: #666;\n  line-height: 35px;\n  overflow-y: auto;\n  padding-bottom: 100px;\n}\n\n[contentEditable=true]:empty:not(:focus):before{\n    content:attr(data-placeholder);\n    cursor: text;\n    color: #AAA;\n}\n\n.editor__titleStoryBox___2iRiE {\n  padding: 10px 0px;\n  border: 0;\n  outline: 0;\n  font-family: 'Slabo 27px', serif;\n  font-size: 2em;\n  color: #3FC380;\n}\n\n.editor__editorBar___2WRUm {\n  position: absolute !important;\n  right: 30px;\n  top: 0px;\n}\n\n.editor__editorBar___2WRUm > div, .editor__editorBar___2WRUm > a {\n  width: 100px;\n  height: 90px;\n  cursor: pointer;\n  padding: 0px;\n  padding-bottom: -10px;\n  border: 2px solid #FFF;\n  transition: .1s;\n  float: left;\n  opacity: 0.8;\n  color: #AAA;\n}\n\n.editor__editorBar___2WRUm > .editor__editorButton___3BdHI:hover, .editor__editorBar___2WRUm > a:hover {\n  border: 2px solid #3FC380;\n  transition: .5s;\n  border-radius: 10px;\n  opacity: 1;\n  color: #3FC380;\n}\n\n.editor__editorBar___2WRUm .editor__editorDanger___2m5jm:hover {\n  color: #D91E18;\n  border-color: #D91E18;\n}\n\n.editor__editorBar___2WRUm > div h6, .editor__editorBar___2WRUm > a h6 {\n  width: 100%;\n  font-size: 1em;\n  text-align: center;\n  padding: 0;\n  margin-top: 0px;\n  font-weight: normal;\n  text-transform: uppercase;\n}\n\n.editor__editorBar___2WRUm .editor__icon___IbBf5 {\n  font-size: 3em;\n  width: 100%;\n  margin-top: 20px;\n}\n\n.editor__tagInput___2qlTq {\n  position: absolute !important;\n  right: 30px;\n  top: 30px;\n}\n\n.editor__wordCount___3aUQE {\n  color: #aaa;\n}\n\n.editor__noteChangesFlag___1eXy8 {\n  background: #AAA;\n  color: #FFF;\n  padding: 3px 20px;\n  margin-left: 10px;\n  border-radius: 12px;\n  opacity: 0.6;\n}\n", ""]);
 
 	// exports
 	exports.locals = {
@@ -77868,13 +77872,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(574);
+
 	var _contentDefault = __webpack_require__(1163);
 
 	var _contentDefault2 = _interopRequireDefault(_contentDefault);
 
 	var _SemanticUI = __webpack_require__(1147);
-
-	var _reactRouter = __webpack_require__(574);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

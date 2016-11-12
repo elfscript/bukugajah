@@ -33,10 +33,55 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setNoteSearchTerm:  noteSearchTerm      => dispatch(setNoteSearchTerm(noteSearchTerm)),
-  addNote:            newNotesData        => dispatch(addNote(newNotesData)),
-  updateNote:         updatedNotesData    => dispatch(updateNote(updatedNotesData)),
-  addNodeleteNotete:  deletedNoteDataId   => dispatch(deleteNote(deletedNoteDataId)),
+  setNoteSearchTerm: noteSearchTerm => dispatch(setNoteSearchTerm(noteSearchTerm)),
+  addNote: (newNotesData) => {
+    dispatch(addNote(newNotesData));
+    fetch(API.STORE_NOTE, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newNotesData),
+    })
+      .then(response => response.json())
+      .then((json) => {
+        console.log('insert success!', json);
+      }).catch((ex) => {
+        console.log('parsing failed', ex);
+      });
+  },
+  updateNote: (updatedNotesData) => {
+    dispatch(updateNote(updatedNotesData));
+    fetch(API.UPDATE_NOTE, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedNotesData),
+    })
+      .then(response => response.json())
+      .then((json) => {
+        console.log('update success!', json);
+      }).catch((ex) => {
+        console.log('parsing failed', ex);
+      });
+  },
+  deleteNote: (deletedNoteDataId) => {
+    dispatch(deleteNote(deletedNoteDataId));
+    fetch(API.DELETE_NOTE, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: deletedNoteDataId }),
+    })
+      .then(response => response.json())
+      .then((json) => {
+        console.log('delete success!', json);
+      }).catch((ex) => {
+        console.log('parsing failed', ex);
+      });
+  },
   fetchNotes: () => {
     dispatch({
       type: ActionTypes.RECEIVE_NOTES,
@@ -56,7 +101,7 @@ const mapDispatchToProps = dispatch => ({
         });
       }).catch((ex) => {
         console.log('parsing failed', ex);
-      })
+      });
   },
 });
 
