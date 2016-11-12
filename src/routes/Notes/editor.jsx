@@ -68,13 +68,14 @@ class Editor extends Component {
           thisNoteId: currentNoteData.id,
         });
       } else {
-        console.log('404 NOT FOUND!');
+        console.log('Notes Data Not Loaded yet...');
       }
     }
   }
 
   handleTitleChange(event) {
     const noteTitleValue = event.target.value;
+
     if (noteTitleValue !== this.state.currentSavedNoteTitle) {
       this.setState({ hasChanges: true });
     } else {
@@ -86,6 +87,7 @@ class Editor extends Component {
 
   handleNoteChange(event) {
     const noteValue = event.target.value;
+
     if (noteValue !== this.state.currentSavedNoteContent) {
       this.setState({ hasChanges: true });
     } else {
@@ -93,7 +95,9 @@ class Editor extends Component {
     }
 
     this.setState({ newNoteContent: noteValue });
-    const countWords = event.target.value.split(' ').filter(word => word !== '&nbsp;' && word !== '&nbsp;&nbsp;');
+    const countWords = event.target.value
+      .split(' ')
+      .filter(word => word !== '&nbsp;' && word !== '&nbsp;&nbsp;');
 
     if (noteValue !== '') {
       this.setState({ noteWords: countWords.length });
@@ -161,21 +165,25 @@ class Editor extends Component {
             <ActionBadgeUI value="your note has been saved!" type="saved" />
             : null
         }
+
         {
           this.state.hasBeenDeleted ?
             <ActionBadgeUI value="your note has been deleted!" type="deleted" />
             : null
         }
+
         {
           this.state.newNoteValidation.isTitleEmpty ?
             <ActionBadgeUI value="title must be filled!" type="deleted" />
             : null
         }
+
         {
           this.state.newNoteValidation.isContentEmpty ?
             <ActionBadgeUI value="content must be filled!" type="deleted" />
             : null
         }
+
         <input
           className={css.titleStoryBox}
           value={this.state.newNoteTitle}
@@ -251,6 +259,8 @@ Editor.propTypes = {
   updateNote: PropTypes.func,
   deleteNote: PropTypes.func,
   notesData:  PropTypes.array,
+  params:     PropTypes.object,
+  history:    PropTypes.object,
 }
 
 export default connector(Editor);

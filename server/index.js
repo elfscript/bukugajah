@@ -28,8 +28,8 @@ app.get('/api/notes', (req, res) => {
     });
 });
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/api/note/', (req, res) => {
   const newNoteData = req.body;
@@ -95,8 +95,8 @@ app.delete('/api/note/', (req, res) => {
       } else {
         res.json(result);
       }
-    })
-})
+    });
+});
 
 // MongoDB Connector
 MongoClient.connect('mongodb://localhost/bukugajahdb', (err, dbConnection) => {

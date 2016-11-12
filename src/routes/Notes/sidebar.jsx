@@ -30,7 +30,7 @@ class Sidebar extends Component {
 
   render() {
     const searchTerm = this.props.noteSearchTerm; // from redux
-    const notesData = this.props.notesData; // from redux?
+    const notesData = this.props.notesData; // from redux
 
     const filteredNotesData = notesData.filter(
       dataNote => (dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
@@ -64,7 +64,9 @@ class Sidebar extends Component {
 }
 
 Sidebar.propTypes = {
-  fetchNotes: PropTypes.func,
+  fetchNotes:     PropTypes.func,
+  noteSearchTerm: PropTypes.string,
+  notesData:      PropTypes.object,
 }
 
 export default connector(Sidebar);
