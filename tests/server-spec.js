@@ -40,7 +40,25 @@ describe('Notes', () => {
     });
   });
   describe('PUT Note', () => {
-    it('should update a SINGLE blob on /blob/<id> PUT');
+    it('SUITE 1: should update a note on /api/note PUT', (done) => {
+      chai.request(server)
+        .put('/api/note')
+        .send({
+          id: 6,
+          title: 'dummy post 2',
+          description: 'just a super dummy post 2',
+          createdAt: '20-20-2016',
+          updatedAt: '20-20-2016',
+          tags: [],
+          category: 'anything',
+          images: [],
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.type.should.equal('application/json');
+          done();
+        });
+    });
   });
   describe('DELETE Note', () => {
     it('should delete a SINGLE blob on /blob/<id> DELETE');
