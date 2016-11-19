@@ -1,3 +1,5 @@
+// API Integration Test using Chai HTTP Assertion Library
+
 const chai      = require('chai');
 const chaiHttp  = require('chai-http');
 
