@@ -67,7 +67,6 @@ router.post('/note/', (req, res) => {
     });
 });
 
-
 router.put('/note/', (req, res) => {
   const updatedNoteData = req.body;
 
