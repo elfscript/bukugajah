@@ -61,6 +61,17 @@ describe('Notes', () => {
     });
   });
   describe('DELETE Note', () => {
-    it('should delete a SINGLE blob on /blob/<id> DELETE');
+    it('SUITE 1: should delete a note on /api/note DELETE', (done) => {
+      chai.request(server)
+        .delete('/api/note')
+        .send({
+          id: 6,
+        })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.type.should.equal('application/json');
+          done();
+        });
+    });
   });
 });
