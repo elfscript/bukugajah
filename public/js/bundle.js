@@ -75901,13 +75901,52 @@
 	      return dispatch((0, _actions.setNoteSearchTerm)(noteSearchTerm));
 	    },
 	    addNote: function addNote(newNotesData) {
-	      return dispatch((0, _actions.addNote)(newNotesData));
+	      dispatch((0, _actions.addNote)(newNotesData));
+	      fetch(API.STORE_NOTE, {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(newNotesData)
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        console.log('insert success!', json);
+	      }).catch(function (ex) {
+	        console.log('parsing failed', ex);
+	      });
 	    },
 	    updateNote: function updateNote(updatedNotesData) {
-	      return dispatch((0, _actions.updateNote)(updatedNotesData));
+	      dispatch((0, _actions.updateNote)(updatedNotesData));
+	      fetch(API.UPDATE_NOTE, {
+	        method: 'PUT',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(updatedNotesData)
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        console.log('update success!', json);
+	      }).catch(function (ex) {
+	        console.log('parsing failed', ex);
+	      });
 	    },
-	    addNodeleteNotete: function addNodeleteNotete(deletedNoteDataId) {
-	      return dispatch((0, _actions.deleteNote)(deletedNoteDataId));
+	    deleteNote: function deleteNote(deletedNoteDataId) {
+	      dispatch((0, _actions.deleteNote)(deletedNoteDataId));
+	      fetch(API.DELETE_NOTE, {
+	        method: 'DELETE',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify({ id: deletedNoteDataId })
+	      }).then(function (response) {
+	        return response.json();
+	      }).then(function (json) {
+	        console.log('delete success!', json);
+	      }).catch(function (ex) {
+	        console.log('parsing failed', ex);
+	      });
 	    },
 	    fetchNotes: function fetchNotes() {
 	      dispatch({
@@ -76524,6 +76563,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	// ACTION CONSTANTS
+
 	// Notes Constants
 	var FETCH_NOTES = exports.FETCH_NOTES = 'FetchNotes';
 	var RECEIVE_NOTES = exports.RECEIVE_NOTES = 'ReceiveNotes';
@@ -76581,9 +76622,13 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	// API Constants
+	// API CONSTANTS
+
 	var FETCH_NOTES = exports.FETCH_NOTES = 'http://localhost:5000/api/notes/';
 	var FETCH_NOTE_DETAILS = exports.FETCH_NOTE_DETAILS = 'http://localhost:5000/api/note/';
+	var STORE_NOTE = exports.STORE_NOTE = 'http://localhost:5000/api/note/';
+	var UPDATE_NOTE = exports.UPDATE_NOTE = 'http://localhost:5000/api/note/';
+	var DELETE_NOTE = exports.DELETE_NOTE = 'http://localhost:5000/api/note/';
 
 /***/ },
 /* 1140 */
@@ -76845,7 +76890,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var searchTerm = this.props.noteSearchTerm; // from redux
-	      var notesData = this.props.notesData; // from redux?
+	      var notesData = this.props.notesData; // from redux
 
 	      var filteredNotesData = notesData.filter(function (dataNote) {
 	        return dataNote.title.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1;
@@ -76902,7 +76947,9 @@
 	}(_react.Component);
 
 	Sidebar.propTypes = {
-	  fetchNotes: _react.PropTypes.func
+	  fetchNotes: _react.PropTypes.func,
+	  noteSearchTerm: _react.PropTypes.string,
+	  notesData: _react.PropTypes.object
 	};
 
 	exports.default = (0, _store.connector)(Sidebar);
@@ -77352,7 +77399,7 @@
 	            thisNoteId: currentNoteData.id
 	          });
 	        } else {
-	          console.log('404 NOT FOUND!');
+	          console.log('Notes Data Not Loaded yet...');
 	        }
 	      }
 	    }
@@ -77360,6 +77407,7 @@
 	    key: 'handleTitleChange',
 	    value: function handleTitleChange(event) {
 	      var noteTitleValue = event.target.value;
+
 	      if (noteTitleValue !== this.state.currentSavedNoteTitle) {
 	        this.setState({ hasChanges: true });
 	      } else {
@@ -77372,6 +77420,7 @@
 	    key: 'handleNoteChange',
 	    value: function handleNoteChange(event) {
 	      var noteValue = event.target.value;
+
 	      if (noteValue !== this.state.currentSavedNoteContent) {
 	        this.setState({ hasChanges: true });
 	      } else {
@@ -77594,7 +77643,9 @@
 	  addNote: _react.PropTypes.func,
 	  updateNote: _react.PropTypes.func,
 	  deleteNote: _react.PropTypes.func,
-	  notesData: _react.PropTypes.array
+	  notesData: _react.PropTypes.array,
+	  params: _react.PropTypes.object,
+	  history: _react.PropTypes.object
 	};
 
 	exports.default = (0, _store.connector)(Editor);
