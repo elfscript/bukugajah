@@ -2,20 +2,20 @@ import {
   createStore,
   applyMiddleware,
   compose,
-}                   from 'redux';
-import { connect }  from 'react-redux';
-import thunk        from 'redux-thunk';
-import                   'whatwg-fetch';
+} from 'redux';
+import { connect } from 'react-redux';
+import thunk from 'redux-thunk';
+import 'whatwg-fetch';
 
-import rootReducer      from '../reducers';
+import rootReducer from '../reducers';
 import * as ActionTypes from '../actions/constants';
-import * as API         from '../actions/apis';
+import * as API from '../actions/apis';
 import {
   setNoteSearchTerm,
   addNote,
   updateNote,
   deleteNote,
-}                       from '../actions';
+} from '../actions';
 
 export const store = createStore(
   rootReducer,
@@ -28,7 +28,7 @@ export const store = createStore(
 );
 
 const mapStateToProps = state => ({
-  notesData:      state.notesData,
+  notesData: state.notesData,
   noteSearchTerm: state.noteSearchTerm,
 });
 
