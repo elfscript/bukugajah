@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Icon } from 'semantic-ui-react';
 
 const IconUI = props => (
-  <Icon name={props.name} className={props.className} />
+  <Icon name={props.name} size='small' className={props.className} />
 )
 
 IconUI.propTypes = {

@@ -9,7 +9,7 @@
     "test-api": "mocha ./tests/server-spec.js",
     "test-react": "export NODE_ENV=production && mocha ./tests/react-spec.js --compilers js:babel-core/register --require ignore-styles",
     "lint": "eslint src",
-    "build": "webpack",
+    "build": "webpack -p",
     "prod": "export NODE_ENV=production && webpack && node server/index.js"
   },
   "author": "",
@@ -66,5 +66,9 @@
     "redux-thunk": "^2.1.0",
     "semantic-ui-react": "^0.56.10",
     "whatwg-fetch": "^1.0.0"
+   },
+  "engines":{
+    "node": ">=4",
+    "npm": ">=2"
   }
 }
