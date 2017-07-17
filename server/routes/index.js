@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.use(cors());
 
-let db;
+var db;
 
 // MongoDB Connector
 MongoClient.connect('mongodb://localhost/bukugajahdb', (err, dbConnection) => {
@@ -36,7 +36,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.post('/note/', (req, res) => {
   const newNoteData = req.body;
-  let newId = 0;
+  var newId = 0;
 
   // Get Latest ID
   db.collection('notes').find()
