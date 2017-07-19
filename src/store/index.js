@@ -103,6 +103,28 @@ const mapDispatchToProps = dispatch => ({
         console.log('parsing failed', ex);
       });
   },
+  fetchNoteDetails: (id) => {
+    dispatch({
+      type: ActionTypes.FETCH_NOTE_DETAILS,
+      text: 'fetch a note detail from server',
+      noteData: [],
+    });
+    fetch(API.FETCH_NOTE_DETAILS, {
+      method: 'GET',
+      mode: 'cors',
+    })
+      .then(response => response.json())
+      .then((json) => {
+        dispatch({
+          type: ActionTypes.FETCH_NOTE_DETAILS,
+          text: 'fetch a note detail from server',
+          noteData: json,
+        });
+      }).catch((ex) => {
+        console.log('parsing failed', ex);
+      });
+  },
+
 });
 
 

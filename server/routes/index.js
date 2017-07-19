@@ -10,9 +10,9 @@ router.use(cors());
 var db;
 
 // MongoDB Connector
-MongoClient.connect('mongodb://localhost/bukugajahdb', (err, dbConnection) => {
+MongoClient.connect('mongodb://localhost/notesdb', (err, dbConnection) => {
   if (err) {
-    console.log('error!');
+    console.log('mongodb  connect error!');
   } else {
     db = dbConnection;
   }
@@ -30,6 +30,18 @@ router.get('/notes', (req, res) => {
       }
     });
 });
+router.get('/note', (req, res) => {
+  db.collection('notes')
+    .find({id:req.body.id})
+    .toArray((err, doc) => {
+      if (err) {
+        console.log('error ', err)
+      } else {
+        res.json(doc);
+      }
+    });
+});
+
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));

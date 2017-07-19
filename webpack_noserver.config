@@ -1,19 +1,15 @@
 const path = require('path')
-// const webpack = require('webpack')
+const webpack = require('webpack')
+const TARGET = process.env.npm_lifecycle_event;    process.env.BABEL_ENV = TARGET;      
 
 module.exports = {
   entry: {
-    app: [
-      'webpack-dev-server/client?http://0.0.0.0:3000',
-      'webpack/hot/only-dev-server',
-      'babel-polyfill',
-      './src/index.jsx',
-    ],
+	  app:[ 'babel-polyfill',
+      './src/index.jsx']
   },
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, 'public/js'),
-    publicPath: 'http://localhost:3000/public/js/',
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
