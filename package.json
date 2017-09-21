@@ -1,16 +1,16 @@
 {
-  "name": "bukugajah",
+  "name": "mynote-react",
   "version": "1.0.0",
-  "description": "just another rip-off app for learning purposes",
+  "description": "try react,redux,mongodb",
   "main": "index.js",
   "scripts": {
     "dev": "set NODE_ENV=development && webpack-dev-server --hot --inline --port 3000",
-    "dev-server": "export NODE_ENV=development && nodemon server/index.js",
+    "dev-server": "set NODE_ENV=development && nodemon server/index.js",
     "test-api": "mocha ./tests/server-spec.js",
     "test-react": "export NODE_ENV=production && mocha ./tests/react-spec.js --compilers js:babel-core/register --require ignore-styles",
     "lint": "eslint src",
     "build": "webpack -p",
-    "prod": "export NODE_ENV=production && webpack && node server/index.js"
+    "prod": "set NODE_ENV=production && webpack  && node server/index.js"
   },
   "author": "",
   "license": "ISC",
