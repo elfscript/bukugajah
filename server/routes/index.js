@@ -20,21 +20,21 @@ MongoClient.connect('mongodb://localhost/notesdb', (err, dbConnection) => {
 
 
 //=== router.get('/notes?s=', (req, res) => {
-
+//=== the filtering operation is usually done in client side rather than in server side
 router.get('/notes', (req, res) => {
 		var s= req.query.s;
 		var qryObj={};
 
 		if(!s) qryObj={};
 		else qryObj={$text: { $search: s }}; 
-		console.log("search= "+ s + "qryObj=" + JSON.stringify(qryObj));
+		console.log("search= "+ s + ", qryObj=" + JSON.stringify(qryObj));
 
 		db.collection('notes')
 		.find(qryObj)
 		.sort({ title: 1 })
 		.toArray((err, docs) => {
 			if (err) {
-			console.log('error ', err)
+			console.log('error on /api/notes', err)
 			} else {
 			res.json(docs);
 			}
